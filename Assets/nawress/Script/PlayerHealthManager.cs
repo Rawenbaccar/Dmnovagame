@@ -40,6 +40,13 @@ public class PlayerHealthManager : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        healthBar.fillAmount = currentHealth / maxHealth; // Mise à jour du remplissage de l'image
+        if(healthBar != null)
+        {
+            healthBar.fillAmount = currentHealth / maxHealth; // Mise à jour du remplissage de l'image
+        }
+        else
+        {
+            Debug.Log($"{nameof(healthBar)} is null! ");
+        }
     }
 }

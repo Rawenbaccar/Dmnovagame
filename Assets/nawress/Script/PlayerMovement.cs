@@ -69,7 +69,7 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
 
 
         mouvementVector *= speed;
-        animate.SetHorizontal(mouvementVector.x);
+        //animate.SetHorizontal(mouvementVector.x);
         rgbd2d.velocity = mouvementVector;
     }
     #endregion
