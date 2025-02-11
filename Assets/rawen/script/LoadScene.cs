@@ -12,4 +12,8 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene("SampleScene 1"); // Mets ici le NOM EXACT de ta scène
+    }
 }

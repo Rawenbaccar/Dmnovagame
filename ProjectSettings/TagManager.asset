@@ -4,9 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Enemy
   - WhipAttack
   - WhipAttack1
+=======
+  - wpn_whip1
+  - wpn_whip
+  - Enemy
+>>>>>>> nawres
   layers:
   - Default
   - TransparentFX
