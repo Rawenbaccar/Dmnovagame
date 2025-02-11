@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - wpn_whip1
+  - wpn_whip
+  - Enemy
   layers:
   - Default
   - TransparentFX
