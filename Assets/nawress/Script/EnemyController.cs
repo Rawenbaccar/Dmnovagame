@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
         {
-            // Détruit l'objet ennemi
+            // Dï¿½truit l'objet ennemi
             Destroy(gameObject);
         }
     }

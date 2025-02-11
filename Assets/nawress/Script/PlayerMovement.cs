@@ -8,7 +8,7 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
 {
     #region private variables
     private Rigidbody2D rgbd2d;
-    private Vector3 mouvementVector; // public cuz we gonna use it for attact hethi lezem prive hotou return fct gett aamlha don' use varible in script !!
+    [SerializeField]private Vector3 mouvementVector; // public cuz we gonna use it for attact hethi lezem prive hotou return fct gett aamlha don' use varible in script !!
     private float lastHorizontalVector; // for attact animation bch ye5ou last input
     private Animate animate;
     [SerializeField] private float speed = 3f;
@@ -69,7 +69,7 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
 
 
         mouvementVector *= speed;
-        animate.SetHorizontal(mouvementVector.x);
+        //animate.SetHorizontal(mouvementVector.x);
         rgbd2d.velocity = mouvementVector;
     }
     #endregion

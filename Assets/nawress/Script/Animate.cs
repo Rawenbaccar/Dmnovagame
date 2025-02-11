@@ -46,7 +46,7 @@ public class Animate : MonoBehaviour
 
     private void Animat()
     {
-        animator.SetFloat("Horizontal", Mathf.Abs(horizontal));
+       // animator.SetFloat("Horizontal", Mathf.Abs(horizontal));
 
         if (horizontal != 0)
         {
