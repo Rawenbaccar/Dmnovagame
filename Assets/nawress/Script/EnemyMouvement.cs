@@ -4,37 +4,45 @@ using UnityEngine;
 
 public class EnemyMouvement : MonoBehaviour
 {
-    #region private variale 
+    #region private variables 
     private Transform player;
-    private float movespeed;
+
+    [SerializeField] private float moveSpeed = 2.0f; // Définir la vitesse de déplacement
     #endregion
 
-    #region Unity CallBacks
+    #region Unity Callbacks
     void Start()
     {
         Init();
     }
+
     void Update()
     {
-        Position();
+        if (player != null)
+        {
+            FollowPlayer();
+        }
     }
     #endregion
-
-
 
     #region private functions
     private void Init()
     {
-        player = FindObjectOfType<PlayerMovement>().transform;
+        // Assurez-vous que le joueur est trouvé
+        PlayerMovement playerScript = FindObjectOfType<PlayerMovement>();
+        if (playerScript != null)
+        {
+            player = playerScript.transform;
+        }
+        else
+        {
+            Debug.LogError("Aucun objet avec le script PlayerMovement n'a été trouvé !");
+        }
     }
 
-    // Update is called once per frame
-    
-
-    private void Position()
+    private void FollowPlayer()
     {
-        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, movespeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
     }
     #endregion
 }
-
