@@ -5,9 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerHealthManager : MonoBehaviour
 {
+
+
+   
+    
     #region Private Variables
-    public float currentHealth;
-    [SerializeField] public float maxHealth = 100f;
+    [SerializeField] private float currentHealth;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float damageAmount = 3F;
+    [SerializeField] private GameOverScreen gameOverScreen;
+
     #endregion
 
     [SerializeField] public Image healthBar; // L'image remplissable représentant la barre de santé
@@ -21,9 +28,12 @@ public class PlayerHealthManager : MonoBehaviour
     void Update()
     {
         // Exemple pour tester la prise de dégâts
-        if (Input.GetKeyDown(KeyCode.T))
+
+        Debug.Log(currentHealth);
+        if (currentHealth <= 0f)
         {
-            TakeDamage(10f);
+            Debug.Log("IIIIIIWAH");
+           PlayerDeath();
         }
     }
 
@@ -31,16 +41,16 @@ public class PlayerHealthManager : MonoBehaviour
     {
         currentHealth -= damageToTake;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Empêche les valeurs négatives
-        if (currentHealth <= 0)
+       /* if (currentHealth <= 0)
         {
             gameObject.SetActive(false);
         }
-        UpdateHealthBar();
+        UpdateHealthBar();*/
     }
 
     private void UpdateHealthBar()
     {
-        if(healthBar != null)
+        if (healthBar != null)
         {
             healthBar.fillAmount = currentHealth / maxHealth; // Mise à jour du remplissage de l'image
         }
@@ -49,4 +59,16 @@ public class PlayerHealthManager : MonoBehaviour
             Debug.Log($"{nameof(healthBar)} is null! ");
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        TakeDamage(damageAmount);
+    }
+    public void PlayerDeath()
+    {
+        // Quand le joueur meurt
+        gameOverScreen.ShowGameOver();
+    }
+
+
 }

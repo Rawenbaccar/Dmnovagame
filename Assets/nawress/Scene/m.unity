@@ -964,6 +964,8 @@ GameObject:
   - component: {fileID: 1539355331}
   - component: {fileID: 1539355330}
   - component: {fileID: 1539355334}
+  - component: {fileID: 1539355336}
+  - component: {fileID: 1539355335}
   m_Layer: 0
   m_Name: hero
   m_TagString: Untagged
@@ -1089,7 +1091,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 100
+  damageAmount: 3
   healthBar: {fileID: 0}
+--- !u!114 &1539355335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539355329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5431d902a431aa4c8982d4a35e05e6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 100
+  damageAmount: 3
+  healthBar: {fileID: 0}
+--- !u!58 &1539355336
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539355329}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.69607043}
+  serializedVersion: 2
+  m_Radius: 0.52823687
 --- !u!1 &1615036107
 GameObject:
   m_ObjectHideFlags: 0
