@@ -36,7 +36,7 @@ public class EnemyMouvement : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Aucun objet avec le script PlayerMovement n'a été trouvé !");
+            Debug.Log("Aucun objet avec le script PlayerMovement n'a été trouvé !");
         }
     }
 

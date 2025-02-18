@@ -10,10 +10,13 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
     private Rigidbody2D rgbd2d;
     [SerializeField]private Vector3 mouvementVector; // public cuz we gonna use it for attact hethi lezem prive hotou return fct gett aamlha don' use varible in script !!
     private float lastHorizontalVector; // for attact animation bch ye5ou last input
+    private float lastVerticalVector;
     private Animate animate;
     [SerializeField] private float speed = 3f;
 
     #endregion
+
+
 
     #region Unity callBacks
     private void Awake()
@@ -62,11 +65,16 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
     {
         mouvementVector.x = Input.GetAxisRaw("Horizontal");
         mouvementVector.y = Input.GetAxisRaw("Vertical");
+
+        // Update last vectors independently
         if (mouvementVector.x != 0)
         {
             lastHorizontalVector = mouvementVector.x;
         }
-
+        if (mouvementVector.y != 0)
+        {
+            lastVerticalVector = mouvementVector.y;
+        }
 
         mouvementVector *= speed;
         //animate.SetHorizontal(mouvementVector.x);

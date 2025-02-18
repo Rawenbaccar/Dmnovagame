@@ -18,10 +18,13 @@ public class EnemyControllerr : MonoBehaviour
     {
         if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
         {
+
             if (deathEffectPrefab != null)
             {
                 Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
             }
+            AudioManager.PlayEnemyDeathSound();  // Play death sound
+
             Destroy(gameObject);
         }
     }
