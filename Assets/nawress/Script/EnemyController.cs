@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
         {
-            // D�truit l'objet ennemi
+            AudioManager.PlayEnemyDeathSound();  // Play death sound
             Destroy(gameObject);
         }
     }
