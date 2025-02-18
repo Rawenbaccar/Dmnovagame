@@ -2904,7 +2904,7 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 100
   damageAmount: 3
-  gameOverScreen: {fileID: 0}
+  gameOverScreen: {fileID: 1075974291}
   survivalTimer: {fileID: 6833840216333975736}
   spriteRenderer: {fileID: 0}
   normalSprite: {fileID: 0}
