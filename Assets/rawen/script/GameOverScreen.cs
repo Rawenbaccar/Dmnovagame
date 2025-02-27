@@ -5,7 +5,7 @@ public class GameOverScreen : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
 
-    [SerializeField] private float fadeSpeed = 2f;
+  // [SerializeField] private float fadeSpeed = 2f;
     [SerializeField] private string menuSceneName = "MainMenu"; // Nom de votre scène de menu
 
    

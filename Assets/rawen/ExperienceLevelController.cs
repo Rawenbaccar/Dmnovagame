@@ -31,8 +31,8 @@ public class ExperienceLevelController : MonoBehaviour
 
     [Header("Slider Animation")]
     [SerializeField] private float sliderSpeed = 2f; // Vitesse de l'animation du slider
-    private float targetSliderValue = 0f;
-    private float currentSliderValue = 0f;
+    public float targetSliderValue = 0f;
+    public float currentSliderValue = 0f;
 
     private void Awake()
     {
@@ -58,12 +58,18 @@ public class ExperienceLevelController : MonoBehaviour
         // Animation fluide du slider
         if (currentSliderValue != targetSliderValue)
         {
-            currentSliderValue = Mathf.Lerp(currentSliderValue, targetSliderValue, Time.deltaTime * sliderSpeed);
+           
+            //currentSliderValue = Mathf.Lerp(currentSliderValue, targetSliderValue, Time.deltaTime * sliderSpeed);
+            currentSliderValue+=0.2f;
             expSlider.value = currentSliderValue;
 
             if (expSlider.value >= 0.999f)
             {
                 ShowPowerUpPanel();
+                currentSliderValue = 0f;
+                collectedDiamonds = 0;
+                targetSliderValue = 0f;
+                expSlider.value = 0f;
             }
         }
     }
@@ -103,8 +109,8 @@ public class ExperienceLevelController : MonoBehaviour
     // Méthode à appeler depuis les boutons de power-up
     public void OnPowerUpSelected()
     {
-        if (powerUpPanel != null)
-            powerUpPanel.SetActive(false);
+        if (powerUpPanel != null) 
+        powerUpPanel.SetActive(false);
 
         Time.timeScale = 1f; // Reprend le jeu si vous l'aviez mis en pause
         LevelUp();

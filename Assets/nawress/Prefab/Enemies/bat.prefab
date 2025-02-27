@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1846749931981302762}
   - component: {fileID: 6197625500327531477}
   - component: {fileID: 1906188219}
-  - component: {fileID: 1906188223}
+  - component: {fileID: 4559831377767270215}
   m_Layer: 0
   m_Name: bat
   m_TagString: Enemy
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -792640611
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 458459274, guid: 6f8a35fe5f50d69408c409b02b144bd0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
---- !u!114 &1906188223
+--- !u!114 &4559831377767270215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,6 +157,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1846749931981302763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 575c90eac4d1b614b81491e27310f2a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 494f84f697bc9684b94e05b6f9862813, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEffectPrefab: {fileID: 6619888825984173343, guid: 0c6562c38da48b24e9c090096bee5b3f, type: 3}
