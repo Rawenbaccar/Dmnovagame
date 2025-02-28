@@ -14,7 +14,7 @@ public class PlayerHealthManager : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite normalSprite;
     [SerializeField] private Sprite hitSprite;
-    [SerializeField] private float hitEffectDuration = 0.2f;
+   // [SerializeField] private float hitEffectDuration = 0.2f;
     #endregion
 
     public Slider Healthslider; // L'image remplissable représentant la barre de santé

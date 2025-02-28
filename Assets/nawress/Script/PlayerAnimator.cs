@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,8 @@ public class PlayerAnimator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        am = GetComponent < Animator>();
-        pm = GetComponent<PlayerMovement>();
+        am = GetComponent<Animator>();
+        pm = GetComponentInParent<PlayerMovement>();
         sr = GetComponent<SpriteRenderer>();
     }
 
@@ -40,5 +41,10 @@ public class PlayerAnimator : MonoBehaviour
         {
             sr.flipX = false;
         }
+    }
+
+    internal void SetAnimate(GameObject animObject)
+    {
+        am = animObject.GetComponent<Animator>();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
     private float lastVerticalVector;
     private Animate animate;
     [SerializeField] private float speed = 3f;
+    
 
     #endregion
 
@@ -29,12 +31,16 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
     {
         PlayerMove();
     }
+     void Start()
+    {
+        
+    }
     #endregion
 
 
 
 
-
+    
 
 
 

@@ -4,6 +4,7 @@ public class EnemyControllerr : MonoBehaviour
 {
     // Référence statique partagée par tous les ennemis
     public static GameObject deathEffectPrefab;
+    private HealthController healthController;
 
     private void Start()
     {
@@ -12,20 +13,18 @@ public class EnemyControllerr : MonoBehaviour
         {
             deathEffectPrefab = Resources.Load<GameObject>("Prefabs/sprite");  // Mettez le bon chemin vers votre préfab
         }
+        
+        healthController = GetComponent<HealthController>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
         {
-
-            if (deathEffectPrefab != null)
+            if (healthController != null)
             {
-                Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+                healthController.TakeDamage(1f); // Deal 1 damage per hit
             }
-            AudioManager.PlayEnemyDeathSound();  // Play death sound
-
-            Destroy(gameObject);
         }
     }
 }
