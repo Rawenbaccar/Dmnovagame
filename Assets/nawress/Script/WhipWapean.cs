@@ -1,55 +1,63 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WhipWapean : MonoBehaviour
 {
-    #region Private varibles
-    [SerializeField] private  float timeToAttack = 4f; //how long it takes to use this weapen
-    private float timer; // pour suivi le temps pour la prochaine attaque 
-    [SerializeField] private GameObject leftWhipObject; //show varible in inspecter meme hiya private
+    #region Private Variables
+    [SerializeField] private float timeToAttack = 4f; // Temps entre les attaques
+    private float timer;
+    [SerializeField] private GameObject leftWhipObject;
     [SerializeField] private GameObject rightWhipObject;
     private PlayerMovement playerMove;
     #endregion
 
-
-    #region Unity CallBacks
-    // Start is called before the first frame update
-    void Start() 
+    #region Unity Callbacks
+    void Start()
     {
         playerMove = GetComponentInParent<PlayerMovement>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ManageAttack();
     }
     #endregion
 
-
-
     #region Private Functions
+    public void SetAttackSpeed(float newAttackSpeed)
+    {
+        timeToAttack = newAttackSpeed;
+    }
+
     private void ManageAttack()
     {
         timer -= Time.deltaTime;
         if (timer < 0f)
-        { // si le temps ecouler le joueur peut attquer 
+        {
             Attack();
         }
     }
 
-    private void Attack(){
-        timer = timeToAttack; 
+    private void Attack()
+    {
+        timer = timeToAttack;
 
-        if(playerMove.GetLastHorizontalVector() > 0)
+        if (playerMove.GetLastHorizontalVector() > 0)
         {
             leftWhipObject.SetActive(true);
+            StartCoroutine(DisableWhipAfterTime(leftWhipObject)); // Désactivation après un temps
         }
-        else{
+        else
+        {
             rightWhipObject.SetActive(true);
+            StartCoroutine(DisableWhipAfterTime(rightWhipObject));
         }
-        #endregion
-
     }
+
+    private IEnumerator DisableWhipAfterTime(GameObject whip)
+    {
+        yield return new WaitForSeconds(0.5f); // Ajuste la durée selon l'animation
+        whip.SetActive(false);
+    }
+    #endregion
 }

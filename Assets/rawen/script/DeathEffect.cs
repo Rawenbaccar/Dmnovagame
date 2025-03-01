@@ -4,9 +4,11 @@ using UnityEngine;
 public class DeathEffect : MonoBehaviour
 {
     [SerializeField] private float lifetime = 1f;
+    public ExperienceLevelController ELC;
 
     void Start()
     {
+        ELC = FindAnyObjectByType<ExperienceLevelController>();
         Destroy(gameObject, lifetime); // L'effet de mort disparaît après un certain temps
     }
 
@@ -14,6 +16,7 @@ public class DeathEffect : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            ELC.CollectDiamond();
             Destroy(gameObject); // Si le joueur touche l'effet, il disparaît immédiatement
         }
     }

@@ -16,6 +16,10 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
 
     #endregion
 
+    public void SetSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+    }
 
 
     #region Unity callBacks

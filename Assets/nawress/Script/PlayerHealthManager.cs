@@ -17,16 +17,14 @@ public class PlayerHealthManager : MonoBehaviour
     [SerializeField] private float hitEffectDuration = 0.2f;
     #endregion
 
-    public Slider Healthslider; // L'image remplissable repr�sentant la barre de sant�
+    public Slider Healthslider; // L'image remplissable représentant la barre de santé
     
 
     void Start()
     {
         currentHealth = maxHealth;
         Healthslider.maxValue = maxHealth;
-        Healthslider.value = currentHealth;
-      //check with yassine   
-        // Only try to get and use SpriteRenderer if we need hit effects
+        Healthslider.value = currentHealth;  
         if (hitSprite != null)  // Only proceed if we want hit effects
         {
             // Get the SpriteRenderer if not assigned
@@ -35,7 +33,6 @@ public class PlayerHealthManager : MonoBehaviour
                 spriteRenderer = GetComponent<SpriteRenderer>();
                 if (spriteRenderer == null)
                 {
-                    Debug.LogWarning("No SpriteRenderer found on " + gameObject.name + ". Hit effects will be disabled.");
                     return;
                 }
             }
@@ -49,16 +46,9 @@ public class PlayerHealthManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(currentHealth);
         if (currentHealth <= 0f)
         {
-            Debug.Log("IIIIIIWAH");
             PlayerDeath();
-        }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(damageAmount);
         }
     }
 
