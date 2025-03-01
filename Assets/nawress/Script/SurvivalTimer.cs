@@ -4,7 +4,7 @@ using TMPro; // We use TextMeshPro because I see you're using it in your project
 public class SurvivalTimer : MonoBehaviour
 {
     public TextMeshProUGUI timerText; // This will show the time on screen
-    private float survivalTime = 0f;
+    public float survivalTime = 0f;
     private bool isPlayerAlive = true;
 
     [SerializeField] private SurvivalTimer survivalTimer;
