@@ -4,20 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/rawen/Scenes/Name.unity
-    guid: 218bfb1195c10864084872335055defb
-  - enabled: 1
-    path: Assets/rawen/Scenes/SampleScene 1.unity
-    guid: 514c5148d1c16584eacc95a9b167eb6c
-  - enabled: 1
-    path: Assets/nawress/Scene/character.unity
-    guid: 67c80b99e78a74647898e9e6e21bfadc
-  - enabled: 1
-    path: Assets/nawress/Scene/GameScene.unity
-    guid: 387d9f785eb604749b88243751c4db72
-  - enabled: 1
-    path: Assets/rawen/Scenes/Result.unity
-    guid: e9abc9b52b673d9439035d71d0040884
+  m_Scenes: []
   m_configObjects: {}
