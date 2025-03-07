@@ -18,6 +18,7 @@ public class FireballOrbit : MonoBehaviour
     {
         if (!gameObject.activeSelf) return; // Ne rien faire si la boule de feu est désactivée
 
+        Debug.Log("fireBall supposed to be working");
         Vector2 center = (Vector2)player.position + offset;
         angle += fireball.orbitSpeed * Time.deltaTime;
 

@@ -26,7 +26,7 @@ public class ExperienceLevelController : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private Slider expSlider;
-    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private Text levelText;
     [SerializeField] private GameObject powerUpPanel; // Référence au panel de power-up
 
     [Header("Slider Animation")]
@@ -70,6 +70,8 @@ public class ExperienceLevelController : MonoBehaviour
                 collectedDiamonds = 0;
                 targetSliderValue = 0f;
                 expSlider.value = 0f;
+                LevelUp();
+              //  Time.timeScale = 1f; // Reprend le jeu si vous l'aviez mis en pause
             }
         }
     }
@@ -84,12 +86,13 @@ public class ExperienceLevelController : MonoBehaviour
  
         collectedDiamonds++;
         targetSliderValue = (float)collectedDiamonds / diamondsPerLevel;
+
         UpdateUI();
+
         
 
         
     }
-
     private void AddExperience(int amount)
     {
         this.currentLevel += amount;
@@ -102,7 +105,7 @@ public class ExperienceLevelController : MonoBehaviour
         if (powerUpPanel != null)
         {
             powerUpPanel.SetActive(true);
-            //Time.timeScale = 0f; // Optionnel : met le jeu en pause
+          //  Time.timeScale = 0f; // Optionnel : met le jeu en pause
         }
     }
 

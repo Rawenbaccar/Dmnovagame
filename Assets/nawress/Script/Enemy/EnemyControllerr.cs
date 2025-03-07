@@ -12,6 +12,7 @@ public class EnemyControllerr : MonoBehaviour
         if (deathEffectPrefab == null)
         {
             deathEffectPrefab = Resources.Load<GameObject>("sprite");  // Changement du chemin
+
         }
     }
 
@@ -21,7 +22,8 @@ public class EnemyControllerr : MonoBehaviour
         {
             if (deathEffectPrefab != null)
             {
-                Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+                GameObject instance = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+                instance.tag = "Diamond";
             }
             Destroy(gameObject);
         }

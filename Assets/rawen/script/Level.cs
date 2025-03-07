@@ -1,39 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
-    int level = 1;
-    int experience = 0;
-    [SerializeField] ExperienceBar experienceBar;
-
-    int TO_LEVEL_UP
-    {
-        get
-        {
-            return level * 1000;
-        }
-    }
+    [SerializeField] private int level = 1;
+    [SerializeField] private int requiredDiamonds = 5; // Nombre de diamants nécessaires pour monter de niveau
+    private int currentDiamonds = 0;
+    [SerializeField] private Text levelText;
 
     private void Start()
     {
-        experienceBar.UpdateExperienceSlider(experience, TO_LEVEL_UP);
+        UpdateLevelUI();
     }
-    public void AddExperience (int amount)
+
+    public void AddDiamond()
     {
-        experience += amount;
-        CheckLevelUp();
-        experienceBar.UpdateExperienceSlider(experience, TO_LEVEL_UP);
-    }
-    public void CheckLevelUp()
-    {
-        if ( experience >= TO_LEVEL_UP)
+        currentDiamonds++;
+        Debug.Log($"Diamants collectés : {currentDiamonds}/{requiredDiamonds}");
+
+        if (currentDiamonds >= requiredDiamonds)
         {
-            experience -= TO_LEVEL_UP;
-            level += 1;
+            LevelUp();
         }
-
     }
 
+    private void LevelUp()
+    {
+        currentDiamonds = 0; // Réinitialise le compteur de diamants
+        level++; // Augmente le niveau
+        Debug.Log($"Niveau augmenté ! Nouveau niveau : {level}");
+        UpdateLevelUI();
+    }
+
+    private void UpdateLevelUI()
+    {
+        if (levelText != null)
+        {
+            levelText.text = "Level " + level.ToString();
+        }
+    }
 }
