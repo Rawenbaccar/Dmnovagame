@@ -52,14 +52,14 @@ public class PlayerHealthManager : MonoBehaviour
         }
     }
 
-    void TakeDamage(float damageToTake)
+    public void TakeDamage(float damageToTake)
     {
         currentHealth -= damageToTake;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         Healthslider.value = currentHealth;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+   public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {

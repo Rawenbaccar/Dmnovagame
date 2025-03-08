@@ -11,4 +11,4 @@ public class EnemyTypes : MonoBehaviour
     }
 
     public EnemyType[] enemyTypes;
-} 
+}

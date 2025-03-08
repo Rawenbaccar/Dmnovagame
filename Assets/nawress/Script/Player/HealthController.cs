@@ -23,9 +23,7 @@ public class HealthController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T)){
-            
-        }
+        
     }
 
     public void TakeDamage(float damageToTake)
