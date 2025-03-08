@@ -9,7 +9,6 @@ public class DeathEffect : MonoBehaviour
     void Start()
     {
         ELC = FindAnyObjectByType<ExperienceLevelController>();
-        Destroy(gameObject, lifetime); // L'effet de mort disparaît après un certain temps
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

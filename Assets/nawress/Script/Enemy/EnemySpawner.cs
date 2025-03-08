@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -9,20 +10,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Vector2 spawnArea = new Vector2(10f, 10f);  // Spawn area size
     private float nextSpawnTime;
     private float gameTime;  // Track how long the game has been running
+    private List<GameObject> unlockedEnemies = new List<GameObject>(); // Stores unlocked enemies
+
     #endregion
 
     #region Unity Callbacks
     void Start()
     {
-        // Add validation
-        if (enemyTypes == null)
-        {
-            Debug.LogError("EnemyTypes not assigned to EnemySpawner!");
-            enabled = false; // Disable this component if enemyTypes is missing
-            return;
-        }
-
-        if (enemyTypes.enemyTypes == null || enemyTypes.enemyTypes.Length == 0)
+        if (enemyTypes == null || enemyTypes.enemyTypes == null || enemyTypes.enemyTypes.Length == 0)
         {
             Debug.LogError("No enemy types configured in EnemyTypes!");
             enabled = false;
@@ -30,7 +25,11 @@ public class EnemySpawner : MonoBehaviour
         }
 
         Init();
+
+        
+        unlockedEnemies.Add(enemyTypes.enemyTypes[0].enemyPrefab);
     }
+
 
     void Update()
     {
@@ -66,7 +65,7 @@ public class EnemySpawner : MonoBehaviour
         if (enemyToSpawn != null)
         {
             Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity);
-            Debug.Log($"Spawned enemy: {enemyToSpawn.name} at position: {spawnPosition}");
+           
         }
         else
         {
@@ -76,47 +75,27 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject ChooseEnemyType()
     {
-        if (enemyTypes == null || enemyTypes.enemyTypes == null)
+        if (unlockedEnemies.Count == 0)
         {
-            Debug.LogError("EnemyTypes not properly configured!");
+            Debug.LogError("No enemies unlocked yet!");
             return null;
         }
 
-        float totalWeight = 0;
+        int randomIndex = Random.Range(0, unlockedEnemies.Count);
+        return unlockedEnemies[randomIndex];
+    }
 
-        // Calculate total weight of available enemies
+    public void UnlockNewEnemy()
+    {
         foreach (var enemyType in enemyTypes.enemyTypes)
         {
-            if (gameTime >= enemyType.minSpawnTime)
+            if (!unlockedEnemies.Contains(enemyType.enemyPrefab)) // If not already unlocked
             {
-                totalWeight += enemyType.spawnWeight;
+                unlockedEnemies.Add(enemyType.enemyPrefab);
+                Debug.Log($"New enemy unlocked: {enemyType.enemyPrefab.name}");
+                break; // Unlock only one new enemy at a time
             }
         }
-
-        if (totalWeight <= 0)
-        {
-            Debug.LogWarning("No enemies available to spawn yet!");
-            return null;
-        }
-
-        // Get a random value between 0 and total weight
-        float randomValue = Random.Range(0, totalWeight);
-        float currentWeight = 0;
-
-        // Choose enemy based on weights
-        foreach (var enemyType in enemyTypes.enemyTypes)
-        {
-            if (gameTime >= enemyType.minSpawnTime)
-            {
-                currentWeight += enemyType.spawnWeight;
-                if (randomValue <= currentWeight)
-                {
-                    return enemyType.enemyPrefab;
-                }
-            }
-        }
-
-        return null;
     }
     #endregion
 }
