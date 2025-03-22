@@ -17,7 +17,7 @@ public class EnemyControllerr : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
+        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBal") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife")) 
         {
             // Check if the enemy has a MonsterEnemy script attached to it
             MonsterEnemy monsterEnemy = GetComponent<MonsterEnemy>();
