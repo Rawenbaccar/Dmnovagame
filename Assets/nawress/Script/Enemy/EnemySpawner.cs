@@ -92,7 +92,6 @@ public class EnemySpawner : MonoBehaviour
             if (!unlockedEnemies.Contains(enemyType.enemyPrefab)) // If not already unlocked
             {
                 unlockedEnemies.Add(enemyType.enemyPrefab);
-                Debug.Log($"New enemy unlocked: {enemyType.enemyPrefab.name}");
                 break; // Unlock only one new enemy at a time
             }
         }

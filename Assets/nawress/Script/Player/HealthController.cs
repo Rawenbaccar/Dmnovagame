@@ -9,6 +9,7 @@ public class HealthController : MonoBehaviour
     [SerializeField] private float maxHealth = 3f; // 3 hits to kill
     [SerializeField] private Slider healthBar; // Reference to UI health bar
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +50,7 @@ public class HealthController : MonoBehaviour
             Instantiate(EnemyControllerr.deathEffectPrefab, transform.position, Quaternion.identity);
         }
         
-        AudioManager.PlayEnemyDeathSound();
+        
         Destroy(gameObject);
     }
 }

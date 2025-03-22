@@ -15,13 +15,39 @@ public class Character : MonoBehaviour
         InitAnimation(selectedCharacter.spritePrefab);
     }
 
+
+
+
+
     private void InitAnimation(GameObject spritePrefab)
     {
         GameObject animObject = Instantiate(spritePrefab, transform);
-        
 
+        // Find PlayerHealthManager
+        PlayerHealthManager healthManager = FindObjectOfType<PlayerHealthManager>();
+        if (healthManager == null)
+        {
+            Debug.LogError("PlayerHealthManager NOT found!");
+            return;
+        }
+
+        // Find PlayerAnimator
+        PlayerAnimator animator = animObject.GetComponent<PlayerAnimator>(); 
+        if (animator == null)
+        {
+            Debug.LogError("PlayerAnimator NOT found in instantiated character!");
+            return;
+        }
+
+        // Assign animator to health manager
+        healthManager.playerAnimator = animator;
+        Debug.Log("Successfully assigned PlayerAnimator to HealthManager!");
     }
 
+
+
+
+
     // Update is called once per frame
-    
+
 }
