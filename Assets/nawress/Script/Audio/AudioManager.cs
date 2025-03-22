@@ -3,101 +3,113 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
-    #region private variable
+    [Header(" Music Settings")]
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioClip[] levelMusicTracks;
+    [Range(0f, 1f)] [SerializeField] private float musicVolume = 0.3f;
+
+    [Header(" Sound Effects")]
     [SerializeField] private AudioSource sfxSource;
-    [SerializeField] private AudioClip backgroundMusic;
-    [SerializeField] private AudioClip enemyDeathSound;
-    
+
+    [Header(" Level Change Sound")]
+    [SerializeField] private AudioClip levelChangeSound;
+    [Range(0f, 1f)] [SerializeField] private float levelChangeVolume = 0.8f;
+
+    [Header(" Game Over Sound")]
+    [SerializeField] private AudioClip gameOverSound;
+    [Range(0f, 1f)] [SerializeField] private float gameOverVolume = 0.8f;
+
+    [Header(" Button Click Sound")]
+    [SerializeField] private AudioClip buttonClickSound;
+    [Range(0f, 1f)] [SerializeField] private float buttonClickVolume = 0.7f;
+
+
     private static AudioManager instance;
-
-
-    #endregion
-
-
 
     void Awake()
     {
-        Audio();
+        SetupAudio();
     }
 
-    private void Audio()
+    private void SetupAudio()
     {
-        // Singleton pattern to keep music playing between scenes
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Setup audio sources if not assigned
-            if (musicSource == null)
-                musicSource = gameObject.AddComponent<AudioSource>();
+            // Setup sources
+            if (musicSource == null) musicSource = gameObject.AddComponent<AudioSource>();
+            if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
 
-            if (sfxSource == null)
-                sfxSource = gameObject.AddComponent<AudioSource>();
-
-            // Configure sources with adjusted volumes
-            musicSource.clip = backgroundMusic;
+            // Music setup
             musicSource.loop = true;
-            musicSource.volume = 0.3f;
+            musicSource.volume = musicVolume;
 
-            sfxSource.volume = 0.8f;
-            sfxSource.loop = false;
-
-            musicSource.Play();
+            // Play first track
+            if (levelMusicTracks.Length > 0)
+            {
+                musicSource.clip = levelMusicTracks[0];
+                musicSource.Play();
+            }
         }
         else
         {
             Destroy(gameObject);
-            return;
         }
     }
 
-    public static void PlayEnemyDeathSound()
+    // ============= PUBLIC FUNCTIONS TO PLAY SOUND EFFECTS =============
+
+    public static void PlayButtonClickSound()
     {
-        if (instance != null && instance.enemyDeathSound != null)
+        if (instance != null && instance.buttonClickSound != null)
         {
-            instance.sfxSource.PlayOneShot(instance.enemyDeathSound);
+            instance.sfxSource.PlayOneShot(instance.buttonClickSound, instance.buttonClickVolume);
+        }
+    }
+
+
+
+    public static void PlayLevelChangeSound()
+    {
+        if (instance != null && instance.levelChangeSound != null)
+        {
+            instance.sfxSource.PlayOneShot(instance.levelChangeSound, instance.levelChangeVolume);
+        }
+    }
+
+    public static void PlayGameOverSound()
+    {
+        if (instance != null && instance.gameOverSound != null)
+        {
+            instance.sfxSource.PlayOneShot(instance.gameOverSound, instance.gameOverVolume);
+        }
+    }
+
+    // ============= MUSIC CONTROL =============
+
+    public void ChangeMusicForLevel(int levelNumber)
+    {
+        int index = (levelNumber - 1) / 3;
+        if (index >= levelMusicTracks.Length) index = levelMusicTracks.Length - 1;
+
+        AudioClip newMusic = levelMusicTracks[index];
+
+        if (musicSource.clip != newMusic)
+        {
+            musicSource.clip = newMusic;
+            musicSource.Play();
         }
     }
 
     public void SetMusicVolume(float volume)
     {
-        musicSource.volume = volume;
+        musicVolume = volume;
+        musicSource.volume = musicVolume;
     }
 
-    public void SetSFXVolume(float volume)
-    {
-        sfxSource.volume = volume;
-    }
+    // ============= GET INSTANCE =============
 
-    public void FadeMusic(float targetVolume, float duration)
-    {
-        StartCoroutine(FadeMusicCoroutine(targetVolume, duration));
-    }
-
-    private IEnumerator FadeMusicCoroutine(float targetVolume, float duration)
-    {
-        float startVolume = musicSource.volume;
-        float elapsed = 0;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / duration);
-            yield return null;
-        }
-
-        musicSource.volume = targetVolume;
-    }
-
-    public void PauseMusic()
-    {
-        musicSource.Pause();
-    }
-
-    public void ResumeMusic()
-    {
-        musicSource.UnPause();
-    }
-} 
+    public static AudioManager Instance => instance;
+}

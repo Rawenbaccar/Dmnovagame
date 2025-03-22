@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerHealthManager : MonoBehaviour
 {
+    public PlayerAnimator playerAnimator; // Drag your player animator here in Inspector
+    public Rigidbody2D rb;
     #region Private Variables
     [SerializeField] private float currentHealth;
     [SerializeField] private float maxHealth = 100f;
@@ -18,10 +20,17 @@ public class PlayerHealthManager : MonoBehaviour
     #endregion
 
     public Slider Healthslider; // L'image remplissable représentant la barre de santé
-    
+    public bool isDead;
 
     void Start()
     {
+        if (playerAnimator == null)
+        {
+            playerAnimator = GetComponentInChildren<PlayerAnimator>();
+            Debug.Log("Assigned PlayerAnimator: " + playerAnimator);
+        }
+
+        isDead = false;
         currentHealth = maxHealth;
         Healthslider.maxValue = maxHealth;
         Healthslider.value = currentHealth;  
@@ -46,9 +55,11 @@ public class PlayerHealthManager : MonoBehaviour
 
     void Update()
     {
-        if (currentHealth <= 0f)
+        if (currentHealth <= 0f && !isDead)
         {
             PlayerDeath();
+            playerAnimator.Die(); // Call the dead animation
+
         }
     }
 
@@ -69,8 +80,13 @@ public class PlayerHealthManager : MonoBehaviour
 
     void PlayerDeath()
     {
+        isDead = true;
+        AudioManager.PlayGameOverSound(); // This will play the game over sound effect 
+
         // Quand le joueur meurt
         gameOverScreen.ShowGameOver();
+       
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
     }
 }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour
 {
+
     [SerializeField] private GameObject powerUpPanel;
     [SerializeField] private PlayerHealthManager playerHealthManager; // Référence à PlayerHealthManager
     [SerializeField] private PlayerStats playerStats;
