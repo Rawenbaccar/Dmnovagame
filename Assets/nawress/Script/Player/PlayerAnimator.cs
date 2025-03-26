@@ -57,7 +57,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Player Died");
+       
         am.SetTrigger("Dead"); // Play the dead animation
     }
 
