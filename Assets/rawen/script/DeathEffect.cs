@@ -5,7 +5,6 @@ public class DeathEffect : MonoBehaviour
 {
     [SerializeField] private float lifetime = 1f;
     public ExperienceLevelController ELC;
-    
     void Start()
     {
         ELC = FindAnyObjectByType<ExperienceLevelController>();
