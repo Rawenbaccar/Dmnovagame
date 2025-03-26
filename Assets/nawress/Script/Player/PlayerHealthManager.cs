@@ -76,6 +76,15 @@ public class PlayerHealthManager : MonoBehaviour
         {
             TakeDamage(damageAmount);
         }
+        if (collision.CompareTag("Boss")) // Check if the player collides with the boss
+        {
+            BossHealthManager bossHealth = collision.GetComponent<BossHealthManager>();
+            if (bossHealth != null)
+            {
+                bossHealth.TakeDamage(3f); // Deal damage to the boss
+                
+            }
+        }
     }
 
     void PlayerDeath()

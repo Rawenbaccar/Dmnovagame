@@ -16,7 +16,7 @@ public class DeathEffect : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             ELC.CollectDiamond();
-            Destroy(gameObject); // Si le joueur touche l'effet, il disparaît immédiatement
+            Destroy(gameObject); // Si le joueur touche l'effet, il disparaï¿½t immï¿½diatement
         }
     }
 }
