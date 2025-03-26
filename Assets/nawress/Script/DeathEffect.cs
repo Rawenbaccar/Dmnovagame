@@ -5,6 +5,7 @@ public class DeathEffect : MonoBehaviour
 {
     [SerializeField] private float lifetime = 1f;
     public ExperienceLevelController ELC;
+    
     void Start()
     {
         ELC = FindAnyObjectByType<ExperienceLevelController>();
@@ -15,7 +16,7 @@ public class DeathEffect : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             ELC.CollectDiamond();
-            Destroy(gameObject); // Si le joueur touche l'effet, il disparaît immédiatement
+            Destroy(gameObject); // Si le joueur touche l'effet, il disparaï¿½t immï¿½diatement
         }
     }
 }
