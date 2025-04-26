@@ -21,4 +21,14 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
+
+    public void LoadLeaderboardScene()
+    {
+        SceneManager.LoadScene("leaderBord");
+    }
+
+    public void LoadStartScene()
+    {
+        SceneManager.LoadScene("Start");
+    }
 }

@@ -2,38 +2,125 @@ using UnityEngine;
 
 public class FlowerEnemyAI : MonoBehaviour
 {
-    public GameObject flowerPrefab; // Prefab of the flower enemy
-    public int numberOfFlowers = 20; // Number of flowers to spawn
-    public float radius = 5f; // Distance from player
-    public float barrierDuration = 15f; // How long the flower barrier lasts
-    public Color fullHealthColor = Color.green; // Color when at full health
-    public Color lowHealthColor = Color.red; // Color when at low health
+    [Header("Spawn Settings")]
+    public GameObject flowerPrefab;
+    public int numberOfFlowers = 20;
+    public float radius = 5f;
+    public float barrierDuration = 15f;
 
-    public int maxHealth = 15;  // Flower health
-    private int currentHealth; // Track current health
-    private float spawnTime; // When this flower was spawned
-    private SpriteRenderer spriteRenderer; // Reference to the sprite renderer
-    private static int activeFlowerCount; // Track number of active flowers
+    [Header("Health Settings")]
+    public int maxHealth = 70;
+    public int currentHealth;  // Made public to see it clearly in inspector
+    public Color fullHealthColor = Color.green;
+    public Color lowHealthColor = new Color(0.424f, 0f, 0f);
     
+    private float spawnTime;
+    private SpriteRenderer spriteRenderer;
+    private static int activeFlowerCount;
+    private bool isSpawner = true;
+    
+    void Awake()
+    {
+        // Initialize health as soon as object is created
+        currentHealth = maxHealth;
+    }
+
     void Start()
     {
+        if (isSpawner)
+        {
+            SpawnFlowers();
+        }
+        else
+        {
+            InitializeFlower();
+        }
+    }
+
+    void InitializeFlower()
+    {
+        // Make sure health is set
         currentHealth = maxHealth;
         spawnTime = Time.time;
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeFlowerCount++;
-        Debug.Log("flowers script started !");
-
-        SpawnFlowers();//spawn the flowerrss call where unlock level 
-
+        Debug.Log($"Flower initialized with {currentHealth} HP!");
     }
 
     void Update()
     {
-        // Check if the barrier should disappear due to time
-        if (Time.time - spawnTime >= barrierDuration)
+        if (!isSpawner && Time.time - spawnTime >= barrierDuration)
         {
             Die();
             return;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!isSpawner)
+        {
+            Debug.Log($"Collision detected with: {collision.gameObject.name}, Tag: {collision.tag}");
+            
+            if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
+            {
+                Debug.Log("Whip hit detected!");
+                TakeDamage(2);
+            }
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (currentHealth <= 0) return;
+        
+        currentHealth -= damage;
+        Debug.Log($"Flower took {damage} damage! Current HP: {currentHealth}");
+
+        StartCoroutine(DamageFlash());
+
+        // Only die when health is exactly 0 or below
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0; // Set to exactly 0
+            Die();
+        }
+    }
+
+    private System.Collections.IEnumerator DamageFlash()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.white;
+        }
+    }
+
+    void Die()
+    {
+        // Double check to make sure we only die at 0 health
+        if (currentHealth > 0) return;
+
+        activeFlowerCount--;
+        
+        if (activeFlowerCount <= 0)
+        {
+            if (FlowerBarrier.Instance != null)
+            {
+                FlowerBarrier.Instance.DestroyBarrier();
+            }
+        }
+        
+        Debug.Log("Flower died at 0 HP!");
+        Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        if (!isSpawner)
+        {
+            activeFlowerCount--;
         }
     }
 
@@ -55,9 +142,9 @@ public class FlowerEnemyAI : MonoBehaviour
 
         for (int i = 0; i < numberOfFlowers; i++)
         {
-            Debug.Log("flowers are spoawning !");
-            float angle = i * (360f / numberOfFlowers); // Spread evenly in a circle
-            float radian = angle * Mathf.Deg2Rad; // Convert to radians
+            Debug.Log("Spawning flower " + (i + 1));
+            float angle = i * (360f / numberOfFlowers);
+            float radian = angle * Mathf.Deg2Rad;
 
             Vector2 spawnPosition = new Vector2(
                 player.position.x + Mathf.Cos(radian) * radius,
@@ -65,41 +152,19 @@ public class FlowerEnemyAI : MonoBehaviour
             );
 
             GameObject flower = Instantiate(flowerPrefab, spawnPosition, Quaternion.identity);
-            flower.transform.SetParent(transform); // Parent to the main flower
+            FlowerEnemyAI flowerAI = flower.AddComponent<FlowerEnemyAI>();
+            
+            // Set this as a flower instance, not a spawner
+            flowerAI.isSpawner = false;
+            
+            // Copy settings
+            flowerAI.maxHealth = this.maxHealth;
+            flowerAI.barrierDuration = this.barrierDuration;
+            flowerAI.fullHealthColor = this.fullHealthColor;
+            flowerAI.lowHealthColor = this.lowHealthColor;
+            
+            // Initialize the flower immediately
+            flowerAI.InitializeFlower();
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        Debug.Log("Flower took damage! Current HP: " + currentHealth);
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        activeFlowerCount--;
-        
-        // If this was the last flower, notify the barrier
-        if (activeFlowerCount <= 0)
-        {
-            if (FlowerBarrier.Instance != null)
-            {
-                FlowerBarrier.Instance.DestroyBarrier();
-            }
-        }
-        
-        Debug.Log("Flower died!");
-        Destroy(gameObject);
-    }
-
-    void OnDestroy()
-    {
-        // Ensure we decrease the count if destroyed by other means
-        activeFlowerCount--;
     }
 }

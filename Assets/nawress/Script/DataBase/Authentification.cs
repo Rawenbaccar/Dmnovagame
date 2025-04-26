@@ -70,6 +70,7 @@ public class Authentification : MonoBehaviour
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "GameScene";  // Add this to set your game scene name
 
+    private Color errorColor = new Color(0.424f, 0f, 0f);  // #6C0000
     private Color successColor = new Color(0.0f, 0.6f, 0.0f);  // Darker green color
 
     private const string LOGIN_BUTTON_DEFAULT_TEXT = "LOGIN";
@@ -99,31 +100,31 @@ public class Authentification : MonoBehaviour
         // Clear all error messages
         if(loginErrorText != null) {
             loginErrorText.text = "";
-            loginErrorText.color = Color.red;
+            loginErrorText.color = errorColor;
         }
         if(signupErrorText != null) {
             signupErrorText.text = "";
-            signupErrorText.color = Color.red;
+            signupErrorText.color = errorColor;
         }
         if(InfoUserNameText != null) {
             InfoUserNameText.text = "";
-            InfoUserNameText.color = Color.red;
+            InfoUserNameText.color = errorColor;
         }
         if(InfoPasswordText != null) {
             InfoPasswordText.text = "";
-            InfoPasswordText.color = Color.red;
+            InfoPasswordText.color = errorColor;
         }
         if(InfoSignUserNameText != null) {
             InfoSignUserNameText.text = "";
-            InfoSignUserNameText.color = Color.red;
+            InfoSignUserNameText.color = errorColor;
         }
         if(InfoSignMailText != null) {
             InfoSignMailText.text = "";
-            InfoSignMailText.color = Color.red;
+            InfoSignMailText.color = errorColor;
         }
         if(InfoSignPasswordText != null) {
             InfoSignPasswordText.text = "";
-            InfoSignPasswordText.color = Color.red;
+            InfoSignPasswordText.color = errorColor;
         }
 
         ShowLoginPanel();
@@ -234,11 +235,11 @@ public class Authentification : MonoBehaviour
         if(loginErrorText != null) loginErrorText.text = "";
         if(InfoUserNameText != null) {
             InfoUserNameText.text = "";
-            InfoUserNameText.color = Color.red;
+            InfoUserNameText.color = errorColor;
         }
         if(InfoPasswordText != null) {
             InfoPasswordText.text = "";
-            InfoPasswordText.color = Color.red;
+            InfoPasswordText.color = errorColor;
         }
 
         // Update button text to show loading state
@@ -301,7 +302,7 @@ public class Authentification : MonoBehaviour
                         (validationError.username == null || validationError.username.Length == 0) &&
                         (validationError.password == null || validationError.password.Length == 0))
                     {
-                        loginErrorText.color = Color.red;
+                        loginErrorText.color = errorColor;
                         loginErrorText.alignment = TextAlignmentOptions.Center;
                         loginErrorText.text = "Login failed: " + www.error;
                     }
@@ -311,7 +312,7 @@ public class Authentification : MonoBehaviour
                     // If we can't parse as validation error, show generic error in main error text
                     if(loginErrorText != null)
                     {
-                        loginErrorText.color = Color.red;
+                        loginErrorText.color = errorColor;
                         loginErrorText.alignment = TextAlignmentOptions.Center;
                         loginErrorText.text = "Login failed. Please try again.";
                     }
@@ -342,7 +343,7 @@ public class Authentification : MonoBehaviour
                     Debug.LogError("Error parsing login response: " + e.Message);
                     Debug.LogError("Response was: " + www.downloadHandler.text);
                     if(loginErrorText != null) {
-                        loginErrorText.color = Color.red;
+                        loginErrorText.color = errorColor;
                         loginErrorText.alignment = TextAlignmentOptions.Center;
                         loginErrorText.text = "Login succeeded but got unexpected response";
                     }
@@ -383,15 +384,15 @@ public class Authentification : MonoBehaviour
         if(signupErrorText != null) signupErrorText.text = "";
         if(InfoSignUserNameText != null) {
             InfoSignUserNameText.text = "";
-            InfoSignUserNameText.color = Color.red;
+            InfoSignUserNameText.color = errorColor;
         }
         if(InfoSignMailText != null) {
             InfoSignMailText.text = "";
-            InfoSignMailText.color = Color.red;
+            InfoSignMailText.color = errorColor;
         }
         if(InfoSignPasswordText != null) {
             InfoSignPasswordText.text = "";
-            InfoSignPasswordText.color = Color.red;
+            InfoSignPasswordText.color = errorColor;
         }
 
         // Update button text to show loading state
@@ -402,7 +403,7 @@ public class Authentification : MonoBehaviour
         if (signupPasswordInput.text != signupConfirmPasswordInput.text)
         {
             if(InfoSignPasswordText != null) {
-                InfoSignPasswordText.color = Color.red;
+                InfoSignPasswordText.color = errorColor;
                 InfoSignPasswordText.text = "Passwords do not match!";
             }
             // Reset button
@@ -481,7 +482,7 @@ public class Authentification : MonoBehaviour
                         (validationError.email == null || validationError.email.Length == 0) &&
                         (validationError.password == null || validationError.password.Length == 0))
                     {
-                        signupErrorText.color = Color.red;
+                        signupErrorText.color = errorColor;
                         signupErrorText.text = "Signup failed: " + www.error;
                     }
                 }
@@ -489,7 +490,7 @@ public class Authentification : MonoBehaviour
                 {
                     if(signupErrorText != null)
                     {
-                        signupErrorText.color = Color.red;
+                        signupErrorText.color = errorColor;
                         signupErrorText.text = "Signup failed. Please try again.";
                     }
                 }
