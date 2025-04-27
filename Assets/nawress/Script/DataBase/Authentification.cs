@@ -182,40 +182,6 @@ public class Authentification : MonoBehaviour
             return;
         }
 
-        // Validate password length and content
-        string password = signupPasswordInput.text;
-        if (password.Length < 5)
-        {
-            signupErrorText.text = "Password must be at least 5 characters long!";
-            return;
-        }
-
-        // Check for at least 4 letters
-        int letterCount = 0;
-        foreach (char c in password)
-        {
-            if (char.IsLetter(c))
-            {
-                letterCount++;
-            }
-        }
-        
-        // Check for at least 1 digit
-        int digitCount = 0;
-        foreach (char c in password)
-        {
-            if (char.IsDigit(c))
-            {
-                digitCount++;
-            }
-        }
-
-        if (letterCount < 4 || digitCount < 1)
-        {
-            signupErrorText.text = "Password must contain at least 4 letters and 1 number!";
-            return;
-        }
-
         // Validate passwords match
         if (signupPasswordInput.text != signupConfirmPasswordInput.text)
         {
