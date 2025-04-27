@@ -21,10 +21,11 @@ public class FlowerEnemyAI : MonoBehaviour
         spawnTime = Time.time;
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeFlowerCount++;
-        Debug.Log("flowers script started !");
-
-        SpawnFlowers();//spawn the flowerrss call where unlock level 
-
+        
+        if (transform.parent == null) // Only the parent flower spawns the circle
+        {
+            SpawnFlowers();
+        }
     }
 
     void Update()
@@ -35,9 +36,16 @@ public class FlowerEnemyAI : MonoBehaviour
             Die();
             return;
         }
+
+        // Update flower color based on health
+        if (spriteRenderer != null)
+        {
+            float healthPercentage = (float)currentHealth / maxHealth;
+            spriteRenderer.color = Color.Lerp(lowHealthColor, fullHealthColor, healthPercentage);
+        }
     }
 
-    public void SpawnFlowers()
+    void SpawnFlowers()
     {
         if (flowerPrefab == null)
         {
@@ -55,7 +63,6 @@ public class FlowerEnemyAI : MonoBehaviour
 
         for (int i = 0; i < numberOfFlowers; i++)
         {
-            Debug.Log("flowers are spoawning !");
             float angle = i * (360f / numberOfFlowers); // Spread evenly in a circle
             float radian = angle * Mathf.Deg2Rad; // Convert to radians
 

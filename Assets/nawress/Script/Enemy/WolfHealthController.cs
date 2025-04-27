@@ -30,7 +30,7 @@ public class WolfHealthController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBal") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
+        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
         {
             if (deathEffectPrefab != null)
             {

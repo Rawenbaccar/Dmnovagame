@@ -36,7 +36,7 @@ public class BossAI : MonoBehaviour
         animationTimer -= Time.deltaTime;
 
         // Check animation cooldown value
-        Debug.Log("Animation Timer: " + animationTimer);
+        //Debug.Log("Animation Timer: " + animationTimer);
 
         // Check if it's time to play the animation
         if (animationTimer <= 0f)
