@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654726676412",
+    "project_id": "vampireclone-bc17a",
+    "storage_bucket": "vampireclone-bc17a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654726676412:android:a932cff89599e07f8db5b9",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.vampire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJYI59L592AHMH0ZvLZdPsFCriuVFdtCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
