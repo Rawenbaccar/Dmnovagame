@@ -34,7 +34,7 @@ public class ExperienceLevelController : MonoBehaviour
     public float targetSliderValue = 0f;
     public float currentSliderValue = 0f;
 
-    [Header("Enemy Spawner")]
+    [Header("Enemy Management")]
     [SerializeField] private EnemySpawner enemySpawner; // Reference to the EnemySpawner
 
     private void Awake()
@@ -127,12 +127,16 @@ public class ExperienceLevelController : MonoBehaviour
     private void LevelUp()
     {
         this.currentLevel++;
+        
+        // Update enemy health scaling
+        if (EnemyHealthManager.Instance != null)
+        {
+            EnemyHealthManager.Instance.OnPlayerLevelUp(this.currentLevel);
+        }
+        
         UpdateUI();
-        SpawnNewEnemyType(); // Spawn new enemy type when leveling up
-        AudioManager.PlayLevelChangeSound(); // Play level change sound on death
-
-
-
+        SpawnNewEnemyType();
+        AudioManager.PlayLevelChangeSound();
     }
 
     private void SpawnNewEnemyType()

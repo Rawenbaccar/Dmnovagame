@@ -5,16 +5,27 @@ using System.Collections; // Nécessaire pour utiliser les coroutines
 public class WolfHealthController : MonoBehaviour
 {
     public static GameObject deathEffectPrefab;
-    [SerializeField] private float maxHealth = 3f;
+    [SerializeField] private float baseMaxHealth = 3f;
     [SerializeField] private float currentHealth;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private float knockbackDistance = 1f; // Distance du recul
     [SerializeField] private float knockbackDuration = 0.2f; // Durée du recul
 
     private bool isKnockedBack = false; // Empêche les interruptions de recul
+    private float maxHealth;
 
     void Start()
     {
+        // Apply health scaling
+        if (EnemyHealthManager.Instance != null)
+        {
+            maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
+        }
+        else
+        {
+            maxHealth = baseMaxHealth;
+        }
+        
         currentHealth = maxHealth;
         if (healthSlider != null)
         {

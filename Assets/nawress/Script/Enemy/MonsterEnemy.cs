@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class MonsterEnemy : MonoBehaviour
 {
+    [Header("Health")]
+    public float baseMaxHealth = 5f;
+    private float currentHealth;
+    private float maxHealth;
+
+    [Header("Combat")]
     public GameObject acidPuddlePrefab; // Acid puddle prefab
     public Transform spawnPoint; // Position to spawn the acid puddle
     public float attackRange = 2f; // Range to trigger the attack animation
@@ -9,17 +15,30 @@ public class MonsterEnemy : MonoBehaviour
     private float nextAttackTime = 0f; // To keep track of cooldown
     public Animator animator; // Animator to control animations
 
+    [Header("Movement")]
     private GameObject player; // Reference to the player
-
     public float movementSpeed = 2f; // Monster movement speed
 
     void Start()
     {
         player = GameObject.FindWithTag("Player"); // Assuming your player has the "Player" tag
+
+        // Initialize health with scaling
+        if (EnemyHealthManager.Instance != null)
+        {
+            maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
+        }
+        else
+        {
+            maxHealth = baseMaxHealth;
+        }
+        currentHealth = maxHealth;
     }
 
     void Update()
     {
+        if (player == null) return;
+
         // Check the distance between the monster and the player
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
@@ -53,16 +72,25 @@ public class MonsterEnemy : MonoBehaviour
     {
         // Trigger the attack animation
         animator.SetTrigger("Attack");
+    }
 
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     public void Die()
     {
         // Spawn the acid puddle at the enemy's position
-        GameObject acid = Instantiate(acidPuddlePrefab, spawnPoint.position, Quaternion.identity);
-
-        // Destroy the acid puddle after 5 seconds
-        acid.GetComponent<AcidPuddle>().DestroyAfterTime(5f);
+        if (acidPuddlePrefab != null && spawnPoint != null)
+        {
+            GameObject acid = Instantiate(acidPuddlePrefab, spawnPoint.position, Quaternion.identity);
+            acid.GetComponent<AcidPuddle>().DestroyAfterTime(5f);
+        }
 
         // Destroy the enemy
         Destroy(gameObject);
