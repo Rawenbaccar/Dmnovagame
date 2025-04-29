@@ -34,8 +34,9 @@ public class ExperienceLevelController : MonoBehaviour
     public float targetSliderValue = 0f;
     public float currentSliderValue = 0f;
 
-    [Header("Enemy Spawner")]
+    [Header("Enemy Management")]
     [SerializeField] private EnemySpawner enemySpawner; // Reference to the EnemySpawner
+    [SerializeField] private CoinManager coinManager;
 
     private void Awake()
     {
@@ -54,6 +55,10 @@ public class ExperienceLevelController : MonoBehaviour
         if (powerUpPanel != null)
             powerUpPanel.SetActive(false);
         UpdateUI();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 pièces dès le départ
+        }
     }
 
     private void Update()
@@ -127,12 +132,20 @@ public class ExperienceLevelController : MonoBehaviour
     private void LevelUp()
     {
         this.currentLevel++;
+        
+        // Update enemy health scaling
+        if (EnemyHealthManager.Instance != null)
+        {
+            EnemyHealthManager.Instance.OnPlayerLevelUp(this.currentLevel);
+        }
+        
         UpdateUI();
-        SpawnNewEnemyType(); // Spawn new enemy type when leveling up
-        AudioManager.PlayLevelChangeSound(); // Play level change sound on death
-
-
-
+        SpawnNewEnemyType();
+        AudioManager.PlayLevelChangeSound();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 nouvelles pièces
+        }
     }
 
     private void SpawnNewEnemyType()

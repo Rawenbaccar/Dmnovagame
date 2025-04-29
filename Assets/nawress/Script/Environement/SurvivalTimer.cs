@@ -28,4 +28,16 @@ public class SurvivalTimer : MonoBehaviour
         isPlayerAlive = false;
         Debug.Log($"Final Time: {timerText.text}");
     }
+
+    public float GetSurvivalTime()
+    {
+        return survivalTime;
+    }
+
+    public string GetFormattedTime()
+    {
+        int minutes = Mathf.FloorToInt(survivalTime / 60f);
+        int seconds = Mathf.FloorToInt(survivalTime % 60f);
+        return $"{minutes:00}:{seconds:00}";
+    }
 } 

@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
     [Header(" Music Settings")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioClip[] levelMusicTracks;
-    [Range(0f, 1f)] [SerializeField] private float musicVolume = 0.3f;
+    [Range(0f, 1f)] [SerializeField] private float musicVolume = 1f;
 
     [Header(" Sound Effects")]
     [SerializeField] private AudioSource sfxSource;

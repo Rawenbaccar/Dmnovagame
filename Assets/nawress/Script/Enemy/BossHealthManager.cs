@@ -26,7 +26,7 @@ public class BossHealthManager : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
+        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
         {
             TakeDamage(damageAmount);
             Debug.Log("Boss hit by player weapon!");
