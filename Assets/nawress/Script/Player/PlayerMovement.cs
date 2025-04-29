@@ -1,22 +1,21 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(Rigidbody2D))] // add rigidbody auto 
+using FirstPersonMobileTools; // Assure-toi d'utiliser le namespace de ton script Joystick
 
-
-public class PlayerMovement: MonoBehaviour // mouvement !!
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerMovement : MonoBehaviour
 {
     #region private variables
     public Rigidbody2D rgbd2d;
-    [SerializeField]private Vector3 mouvementVector; // public cuz we gonna use it for attact hethi lezem prive hotou return fct gett aamlha don' use varible in script !!
-    private float lastHorizontalVector; // for attact animation bch ye5ou last input
+    [SerializeField] private Vector3 mouvementVector;
+    private float lastHorizontalVector;
     private float lastVerticalVector;
     private Animate animate;
     [SerializeField] private float speed = 3f;
     private bool isAnimating;
-    
 
+    [Header("Joystick Settings")]
+    public Joystick joystick; // 👈 Référence vers ton script Joystick
     #endregion
 
     public void SetSpeed(float newSpeed)
@@ -24,39 +23,26 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
         speed = newSpeed;
     }
 
-
-    #region Unity callBacks
+    #region Unity Callbacks
     private void Awake()
     {
         Init();
-
     }
-    // Update is called once per frame
+
     void Update()
     {
         PlayerMove();
     }
-     void Start()
-    {
-        
-    }
+
+    void Start() { }
     #endregion
 
-
-
-
-    
-
-
-
-
-
     #region Public Functions
-    public Vector3 GetMouvementVector(){
+    public Vector3 GetMouvementVector()
+    {
         return mouvementVector;
     }
-    
-    
+
     public float GetLastHorizontalVector()
     {
         return lastHorizontalVector;
@@ -68,45 +54,40 @@ public class PlayerMovement: MonoBehaviour // mouvement !!
     }
     #endregion
 
-
-    #region private functions
+    #region Private Functions
     private void Init()
     {
-        rgbd2d = GetComponent<Rigidbody2D>(); //On récupère Rigidbody2D du GameObject
+        rgbd2d = GetComponent<Rigidbody2D>();
         mouvementVector = new Vector3();
         animate = GetComponent<Animate>();
     }
 
     private void PlayerMove()
     {
-        if (isAnimating) return; // If the player is animating, skip movement
+        if (isAnimating) return;
 
-        mouvementVector.x = Input.GetAxisRaw("Horizontal");
-        mouvementVector.y = Input.GetAxisRaw("Vertical");
+        // 👉 Utilisation du joystick au lieu de Input.GetAxisRaw
+        mouvementVector.x = joystick.Horizontal;
+        mouvementVector.y = joystick.Vertical;
 
-        // Update last vectors independently
-        if (mouvementVector.x != 0)
+        rgbd2d.velocity = mouvementVector.normalized * speed;
+
+        if (mouvementVector.x != 0 || mouvementVector.y != 0)
         {
             lastHorizontalVector = mouvementVector.x;
-        }
-        if (mouvementVector.y != 0)
-        {
             lastVerticalVector = mouvementVector.y;
         }
 
-        mouvementVector *= speed;
-        rgbd2d.velocity = mouvementVector;
+        if (animate != null)
+            animate.MoveAnimation(mouvementVector);
     }
 
     private IEnumerator FreezeMovementCoroutine(float duration)
     {
-        rgbd2d.velocity = Vector2.zero; // Set the player's velocity to zero to stop movement
-        isAnimating = true; // Freeze movement
-        yield return new WaitForSeconds(duration); // Wait for the specified duration (1 second)
-        isAnimating = false; // Unfreeze movement
+        isAnimating = true;
+        rgbd2d.velocity = Vector2.zero;
+        yield return new WaitForSeconds(duration);
+        isAnimating = false;
     }
     #endregion
-
-
-
 }

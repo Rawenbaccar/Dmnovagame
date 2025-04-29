@@ -9,7 +9,6 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField] private FireballOrbit fireball;
     [SerializeField] private ThunderStrike thunderStrike;
     [SerializeField] private KnifeThrow knifeThrow; // Ajout de la référence à KnifeThrow
-    [SerializeField] private WhipUpgrade whipUpgrade; // Référence au fouet
     [SerializeField] private float knifePowerUpDuration = 10f; // Durée du Power-Up en secondes
     [SerializeField] private GameObject laserPrefab; // Préfab du laser
     [SerializeField] private Transform playerTransform; // Référence au joueur
@@ -20,6 +19,17 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField] private float freezeDuration = 5f; // Durée du freeze
 
 
+    private void Update()
+    {
+        if (powerUpPanel.activeSelf)
+        {
+            Time.timeScale = 0f; // Met la scène en pause
+        }
+        else
+        {
+            Time.timeScale = 1f; // Reprend le jeu normalement
+        }
+    }
 
 
     public void ApplyPlayerSpeedPowerUp()
@@ -136,14 +146,7 @@ public class PowerUpManager : MonoBehaviour
             }
         }
     }
-    public void ApplyWhipUpgradePowerUp()
-    {
-        if (whipUpgrade != null)
-        {
-            whipUpgrade.UpgradeWhip();
-        }
-        powerUpPanel.SetActive(false);
-    }
+
     public void ApplyLaserPowerUp()
     {
         GameObject laserInstance = Instantiate(laserPrefab, playerTransform.position, Quaternion.identity);

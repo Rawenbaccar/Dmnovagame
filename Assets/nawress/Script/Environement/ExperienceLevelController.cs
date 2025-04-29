@@ -36,6 +36,7 @@ public class ExperienceLevelController : MonoBehaviour
 
     [Header("Enemy Management")]
     [SerializeField] private EnemySpawner enemySpawner; // Reference to the EnemySpawner
+    [SerializeField] private CoinManager coinManager;
 
     private void Awake()
     {
@@ -54,6 +55,10 @@ public class ExperienceLevelController : MonoBehaviour
         if (powerUpPanel != null)
             powerUpPanel.SetActive(false);
         UpdateUI();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 pièces dès le départ
+        }
     }
 
     private void Update()
@@ -137,6 +142,10 @@ public class ExperienceLevelController : MonoBehaviour
         UpdateUI();
         SpawnNewEnemyType();
         AudioManager.PlayLevelChangeSound();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 nouvelles pièces
+        }
     }
 
     private void SpawnNewEnemyType()
