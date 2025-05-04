@@ -7,12 +7,14 @@ public class FlowerBarrier : MonoBehaviour
     private Transform player;
     private Rigidbody2D playerRb;
     private bool wasInside = false;
+    private PlayerKnockback playerKnockback;
 
     void Awake()
     {
         Instance = this;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerRb = player.GetComponent<Rigidbody2D>();
+        playerKnockback = player.GetComponent<PlayerKnockback>();
     }
 
     void FixedUpdate()
@@ -27,29 +29,22 @@ public class FlowerBarrier : MonoBehaviour
         {
             wasInside = true;
         }
-        // If player was previously inside and is now outside
-        else if (wasInside)
-        {
-            // Calculate the closest point on the circle's edge
-            Vector2 closestPoint = (Vector2)transform.position + (directionToPlayer.normalized * radius);
-            
-            // Force the player back to the circle's edge
-            playerRb.MovePosition(closestPoint);
-            
-            // Zero out the velocity to prevent bouncing
-            playerRb.velocity = Vector2.zero;
-        }
-        // If player is outside but hasn't been inside yet
+        // If player is outside the barrier
         else
         {
-            // Allow movement towards the circle
-            Vector2 towardsCenter = ((Vector2)transform.position - (Vector2)player.position).normalized;
-            float movingTowardsCenter = Vector2.Dot(playerRb.velocity, towardsCenter);
+            // Calculate the closest point on the circle's edge
+            Vector2 closestPoint = (Vector2)transform.position + (directionToPlayer.normalized * (radius - 0.5f));
+            
+            // Force the player back inside
+            player.position = closestPoint;
+            playerRb.velocity = Vector2.zero;
 
-            if (movingTowardsCenter < 0)
+            // If player was previously inside, they hit the barrier
+            if (wasInside && playerKnockback != null)
             {
-                // Stop movement away from circle
-                playerRb.velocity = Vector2.zero;
+                // Apply a small knockback inward
+                Vector2 inwardDirection = -directionToPlayer.normalized;
+                playerKnockback.ApplyKnockback(player.position + (Vector3)(inwardDirection * -1));
             }
         }
     }

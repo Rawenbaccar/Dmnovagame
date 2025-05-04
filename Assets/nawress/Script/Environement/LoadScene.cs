@@ -16,6 +16,10 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene 1"); // Mets ici le NOM EXACT de ta scène
     }
+    public void chactersekected()
+    {
+        SceneManager.LoadScene("Character"); // Mets ici le NOM EXACT de ta scène
+    }
 
     public void LoadGameScene()
     {

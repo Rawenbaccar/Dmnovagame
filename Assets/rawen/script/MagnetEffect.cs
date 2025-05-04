@@ -47,7 +47,7 @@ public class MagnetEffect : MonoBehaviour
         {
             if (collider.CompareTag("Diamond"))
             {
-                Debug.Log("el magnito yemchito");
+                //Debug.Log("el magnito yemchito");
                 // Faire bouger le diamant vers le joueur
                 collider.transform.position = Vector3.MoveTowards(collider.transform.position, transform.position, Time.deltaTime * attractionSpeed);
             }

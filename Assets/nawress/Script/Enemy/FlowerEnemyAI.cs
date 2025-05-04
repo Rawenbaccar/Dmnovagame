@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class FlowerEnemyAI : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class FlowerEnemyAI : MonoBehaviour
     public int numberOfFlowers = 20;
     public float radius = 5f;
     public float barrierDuration = 15f;
+    [SerializeField] private bool isSpawner = true;
 
     [Header("Health Settings")]
     public int maxHealth = 70;
@@ -14,10 +16,15 @@ public class FlowerEnemyAI : MonoBehaviour
     public Color fullHealthColor = Color.green;
     public Color lowHealthColor = new Color(0.424f, 0f, 0f);
     
+    [Header("Knockback Settings")]
+    public float knockbackDistance = 2f;
+    public float knockbackDuration = 0.2f;
+    
     private float spawnTime;
     private SpriteRenderer spriteRenderer;
     private static int activeFlowerCount;
-    private bool isSpawner = true;
+    private bool isKnockedBack = false;
+    private static bool hasSpawnedFlowers = false; // New static flag to track if we've spawned flowers
     
     void Awake()
     {
@@ -29,11 +36,24 @@ public class FlowerEnemyAI : MonoBehaviour
     {
         if (isSpawner)
         {
-            SpawnFlowers();
+            // Subscribe to level up event
+            ExperienceLevelController.instance.OnLevelUp += CheckAndSpawnFlowers;
         }
         else
         {
             InitializeFlower();
+        }
+    }
+
+    private void CheckAndSpawnFlowers(int level)
+    {
+        Debug.Log($"Checking level for flower spawn. Current level: {level}");
+        if (level == 12)
+        {
+            Debug.Log("Level 12 reached! Attempting to spawn flowers...");
+            SpawnFlowers();
+            // Unsubscribe after spawning
+            ExperienceLevelController.instance.OnLevelUp -= CheckAndSpawnFlowers;
         }
     }
 
@@ -44,7 +64,7 @@ public class FlowerEnemyAI : MonoBehaviour
         spawnTime = Time.time;
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeFlowerCount++;
-        Debug.Log($"Flower initialized with {currentHealth} HP!");
+        //Debug.Log($"Flower initialized with {currentHealth} HP!");
     }
 
     void Update()
@@ -60,12 +80,21 @@ public class FlowerEnemyAI : MonoBehaviour
     {
         if (!isSpawner)
         {
-            Debug.Log($"Collision detected with: {collision.gameObject.name}, Tag: {collision.tag}");
+            //Debug.Log($"Collision detected with: {collision.gameObject.name}, Tag: {collision.tag}");
             
-            if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1"))
+            if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
             {
-                Debug.Log("Whip hit detected!");
+                //Debug.Log("Whip hit detected!");
                 TakeDamage(2);
+            }
+            else if (collision.CompareTag("Player"))
+            {
+                // Apply knockback to the player when they touch the flower
+                PlayerKnockback playerKnockback = collision.gameObject.GetComponent<PlayerKnockback>();
+                if (playerKnockback != null)
+                {
+                    playerKnockback.ApplyKnockback(transform.position);
+                }
             }
         }
     }
@@ -75,7 +104,7 @@ public class FlowerEnemyAI : MonoBehaviour
         if (currentHealth <= 0) return;
         
         currentHealth -= damage;
-        Debug.Log($"Flower took {damage} damage! Current HP: {currentHealth}");
+        //Debug.Log($"Flower took {damage} damage! Current HP: {currentHealth}");
 
         StartCoroutine(DamageFlash());
 
@@ -112,12 +141,20 @@ public class FlowerEnemyAI : MonoBehaviour
             }
         }
         
-        Debug.Log("Flower died at 0 HP!");
+        //Debug.Log("Flower died at 0 HP!");
         Destroy(gameObject);
     }
 
     void OnDestroy()
     {
+        if (isSpawner)
+        {
+            // Clean up subscription when object is destroyed
+            if (ExperienceLevelController.instance != null)
+            {
+                ExperienceLevelController.instance.OnLevelUp -= CheckAndSpawnFlowers;
+            }
+        }
         if (!isSpawner)
         {
             activeFlowerCount--;
@@ -128,7 +165,7 @@ public class FlowerEnemyAI : MonoBehaviour
     {
         if (flowerPrefab == null)
         {
-            Debug.LogError("No flower prefab assigned!");
+            //Debug.LogError("No flower prefab assigned!");
             return;
         }
 
@@ -136,13 +173,13 @@ public class FlowerEnemyAI : MonoBehaviour
 
         if (player == null)
         {
-            Debug.LogError("Player not found!");
+            //Debug.LogError("Player not found!");
             return;
         }
 
         for (int i = 0; i < numberOfFlowers; i++)
         {
-            Debug.Log("Spawning flower " + (i + 1));
+            //Debug.Log("Spawning flower " + (i + 1));
             float angle = i * (360f / numberOfFlowers);
             float radian = angle * Mathf.Deg2Rad;
 
@@ -166,5 +203,24 @@ public class FlowerEnemyAI : MonoBehaviour
             // Initialize the flower immediately
             flowerAI.InitializeFlower();
         }
+    }
+
+    private IEnumerator Knockback(Transform attacker)
+    {
+        isKnockedBack = true;
+        Vector2 knockbackDirection = (transform.position - attacker.position).normalized;
+        Vector2 startPosition = transform.position;
+        Vector2 targetPosition = startPosition + knockbackDirection * knockbackDistance;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < knockbackDuration)
+        {
+            transform.position = Vector2.Lerp(startPosition, targetPosition, elapsedTime / knockbackDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
+        isKnockedBack = false;
     }
 }
