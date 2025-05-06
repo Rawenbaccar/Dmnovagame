@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,17 +7,20 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
     public void LoadScene2(string SampleScene)
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
     public void LoadNextScene()
     {
-        SceneManager.LoadScene("SampleScene 1"); // Mets ici le NOM EXACT de ta scène
+        SceneManager.LoadScene("SampleScene 1");
     }
+
     public void chactersekected()
     {
-        SceneManager.LoadScene("Character"); // Mets ici le NOM EXACT de ta scène
+        SceneManager.LoadScene("Character");
     }
 
     public void LoadGameScene()
