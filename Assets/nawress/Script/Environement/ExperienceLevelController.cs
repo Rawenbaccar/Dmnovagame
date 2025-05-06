@@ -161,7 +161,7 @@ public class ExperienceLevelController : MonoBehaviour
     {
         if (enemySpawner != null)
         {
-            Debug.Log("🔄 Trying to unlock a new enemy...");
+            
             enemySpawner.UnlockNewEnemy();
         }
         if (AudioManager.Instance != null)
