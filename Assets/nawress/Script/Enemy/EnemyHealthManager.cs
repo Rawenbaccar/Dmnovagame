@@ -15,20 +15,6 @@ public class EnemyHealthManager : MonoBehaviour
     private float timer = 0f;
     private int currentLevel = 1;
 
-    private void Awake()
-    {
-        // Singleton setup
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     private void Update()
     {
         // After level 13, increase health every 15 seconds
@@ -49,15 +35,21 @@ public class EnemyHealthManager : MonoBehaviour
     {
         currentLevel = newLevel;
         
-        // Increase health multiplier
-        IncreaseHealthMultiplier(increasePerLevel);
-        
-        // Activate auto-scaling at level 13
-        if (newLevel >= 13 && !isAutoScalingActive)
+        // Only start scaling health at level 13
+        if (currentLevel >= 2)
         {
-            isAutoScalingActive = true;
-            timer = 0f;
-            Debug.Log("Auto-scaling activated: Enemy health will now increase every 15 seconds");
+            // First time reaching level 13
+            if (!isAutoScalingActive)
+            {
+                isAutoScalingActive = true;
+                timer = 0f;
+                // Start with base multiplier at level 13
+                healthMultiplier = 1f;
+                Debug.Log("Auto-scaling activated: Enemy health will now increase every 15 seconds");
+            }
+            
+            // Increase health multiplier
+            IncreaseHealthMultiplier(increasePerLevel);
         }
         
         Debug.Log($"Level {newLevel}: Enemy health multiplier is now {healthMultiplier}");
@@ -71,6 +63,11 @@ public class EnemyHealthManager : MonoBehaviour
     // Call this to get the current health multiplier for new enemies
     public float GetHealthMultiplier()
     {
+        // Return 1 (no multiplier) before level 13
+        if (currentLevel < 13)
+        {
+            return 1f;
+        }
         return healthMultiplier;
     }
 }

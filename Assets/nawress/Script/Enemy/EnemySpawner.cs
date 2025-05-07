@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (Time.time >= nextSpawnTime)
         {
-            if (hordePrefab != null && currentLevel >= 9 && Random.Range(0f, 1f) <= 1f) // Added level check
+            if (hordePrefab != null && currentLevel >= 10 && Random.Range(0f, 1f) <= 1f) // Added level check
             {
                 Debug.Log("is horde spawning  ?");
                 SpawnHorde();
@@ -66,6 +66,22 @@ public class EnemySpawner : MonoBehaviour
         // Get random position
         Vector3 spawnPosition = GetRandomSpawnPosition();
 
+        // Check if we should spawn boss at level 8
+        if (currentLevel == 8 && !hasBossSpawned)
+        {
+            // Find the boss prefab
+            foreach (var enemyType in enemyTypes.enemyTypes)
+            {
+                if (enemyType.isBoss)
+                {
+                    Instantiate(enemyType.enemyPrefab, spawnPosition, Quaternion.identity);
+                    hasBossSpawned = true;
+                    Debug.Log("Boss spawned at level 8!");
+                    return;
+                }
+            }
+        }
+
         // Choose which enemy to spawn
         GameObject enemyToSpawn = ChooseEnemyType();
         if (enemyToSpawn != null)
@@ -73,7 +89,7 @@ public class EnemySpawner : MonoBehaviour
             // Check if it's a boss enemy
             if (enemyToSpawn.CompareTag("Boss"))
             {
-                if (!hasBossSpawned)
+                if (!hasBossSpawned && currentLevel >= 8)
                 {
                     Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity);
                     hasBossSpawned = true;

@@ -31,7 +31,6 @@ public class BossAttack : MonoBehaviour
     {
         if (bossAnimator != null)
         {
-            Debug.Log("Attack Triggered!"); // Check if the attack is triggered
             bossAnimator.SetTrigger("Attack"); // This will trigger the attack animation
 
             // Freeze the player's movement for 1 second

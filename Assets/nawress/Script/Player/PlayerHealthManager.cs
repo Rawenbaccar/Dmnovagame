@@ -117,6 +117,7 @@ public class PlayerHealthManager : MonoBehaviour
     void PlayerDeath()
     {
         isDead = true;
+        AudioManager.StopBackgroundMusic(); // Stop background music first
         AudioManager.PlayGameOverSound();
 
         gameOverScreen.ShowGameOver();

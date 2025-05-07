@@ -26,15 +26,14 @@ public class BossHealthManager : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
-        {
+        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))        {
             TakeDamage(damageAmount);
-            Debug.Log("Boss hit by player weapon!");
+            
 
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(damageAmount);
-                Debug.Log("Player also took damage!");
+                
             }
             else
             {
@@ -50,7 +49,6 @@ public class BossHealthManager : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateHealthSlider();
-        Debug.Log("Boss took damage! Current health: " + currentHealth);
 
         if (currentHealth <= 0 && !isDead) // Prevent multiple calls
         {
