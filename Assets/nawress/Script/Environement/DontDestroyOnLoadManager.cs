@@ -37,6 +37,7 @@ public class DontDestroyOnLoadManager : MonoBehaviour
         CheckForDuplicates("AuthManager");
         CheckForDuplicates("CoinData");
         CheckForDuplicates("DontDestroyOnLoad");
+        CheckForDuplicates("QualityManager");
     }
 
     private void CheckForDuplicates(string objectName)

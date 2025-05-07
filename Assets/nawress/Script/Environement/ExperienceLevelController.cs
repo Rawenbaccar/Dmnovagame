@@ -40,6 +40,9 @@ public class ExperienceLevelController : MonoBehaviour
 
     [Header("Enemy Management")]
     [SerializeField] private EnemySpawner enemySpawner; // Reference to the EnemySpawner
+    [SerializeField] private GroundChange groundChange;
+    [SerializeField] private CoinManager coinManager;
+
 
     private void Awake()
     {
@@ -58,6 +61,10 @@ public class ExperienceLevelController : MonoBehaviour
         if (powerUpPanel != null)
             powerUpPanel.SetActive(false);
         UpdateUI();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); //  Spawn 3 pièces dès le départ
+        }
     }
 
     private void Update()
@@ -68,7 +75,7 @@ public class ExperienceLevelController : MonoBehaviour
             //Debug.Log("wuuut ?");
             //currentSliderValue = Mathf.Lerp(currentSliderValue, targetSliderValue, Time.deltaTime * sliderSpeed);
             //currentSliderValue += 0.2f;
-            expSlider.value = (float)collectedDiamonds/diamondsPerLevel;
+            expSlider.value = (float)collectedDiamonds / diamondsPerLevel;
 
             if (expSlider.value >= 0.999f)
             {
@@ -131,7 +138,7 @@ public class ExperienceLevelController : MonoBehaviour
     private void LevelUp()
     {
         this.currentLevel++;
-        
+
         // Update enemy spawner's level
         if (enemySpawner != null)
         {
@@ -142,26 +149,34 @@ public class ExperienceLevelController : MonoBehaviour
         {
             Debug.LogError("EnemySpawner reference is missing in ExperienceLevelController!");
         }
-        
+
         // Trigger the level up event
         OnLevelUp?.Invoke(this.currentLevel);
-        
+
         // Update enemy health scaling
         if (EnemyHealthManager.Instance != null)
         {
             EnemyHealthManager.Instance.OnPlayerLevelUp(this.currentLevel);
         }
-        
+
         UpdateUI();
         SpawnNewEnemyType();
         AudioManager.PlayLevelChangeSound();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 nouvelles pièces
+        }
+        if (groundChange != null)
+        {
+            groundChange.OnLevelUp();
+        }
     }
 
     private void SpawnNewEnemyType()
     {
         if (enemySpawner != null)
         {
-            
+
             enemySpawner.UnlockNewEnemy();
         }
         if (AudioManager.Instance != null)

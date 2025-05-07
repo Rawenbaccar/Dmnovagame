@@ -37,4 +37,8 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene("Start");
     }
+    public void LoadShopScene()
+    {
+        SceneManager.LoadScene("shop( character)");
+    }
 }
