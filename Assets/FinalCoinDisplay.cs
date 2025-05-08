@@ -29,7 +29,7 @@ public class FinalCoinDisplay : MonoBehaviour
     {
         if (CoinData.instance != null)
         {
-            coinTotalText.text = "Total Coins: " + CoinData.instance.totalCoins.ToString();
+            coinTotalText.text = CoinData.instance.totalCoins.ToString();
             Debug.Log("FinalCoinDisplay: Coins displayed: " + CoinData.instance.totalCoins);
         }
         else
