@@ -5,18 +5,17 @@ public class FireballOrbit : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Vector2 offset = Vector2.zero;
     [SerializeField] private FireballPowerUp fireball;
-
     private float angle;
+    private int fireballCount = 0; // Compteur de boules de feux
 
-    private void Start()
+
+private void Awake()
     {
-        // Rendre la boule de feu invisible au début
-        gameObject.SetActive(false);
+        gameObject.SetActive(false); // Désactive la fireball au lancement
     }
-
     private void Update()
     {
-        if (!gameObject.activeSelf) return; // Ne rien faire si la boule de feu est désactivée
+        //if (!gameObject.activeSelf) return;
 
         Vector2 center = (Vector2)player.position + offset;
         angle += fireball.orbitSpeed * Time.deltaTime;
@@ -29,6 +28,15 @@ public class FireballOrbit : MonoBehaviour
 
     public void ActivateFireball()
     {
-        gameObject.SetActive(true); // Active la boule de feu quand on clique sur le bouton
+        fireballCount++;
+        CreateFireballInstance(fireballCount);
+    }
+
+    private void CreateFireballInstance(int count)
+    {
+        GameObject newFireball = Instantiate(gameObject, player.position, Quaternion.identity);
+        newFireball.transform.SetParent(player); // Attacher au joueur
+        newFireball.GetComponent<FireballOrbit>().angle = 360f / count * (count - 1); // Répartir autour du joueur
+        newFireball.SetActive(true);
     }
 }

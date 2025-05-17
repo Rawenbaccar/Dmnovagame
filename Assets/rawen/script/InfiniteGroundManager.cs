@@ -3,121 +3,100 @@ using System.Collections.Generic;
 
 public class InfiniteGroundManager : MonoBehaviour
 {
-    public GameObject groundPrefab;  // Le prefab du sol
-    public Transform parentTransform;  // Conteneur des tuiles
-    public Transform player;  // Le joueur
-    public float tileSize = 30f;  // Taille d'une tuile
-    public int poolSize = 20; // Nombre de tuiles dans le pool
+    public GameObject groundPrefab;  // Prefab du sol
+    public Transform player;         // Référence au joueur
+    public int gridSize = 3;         // Taille de la grille (3x3)
 
-    private Vector2 currentTile;  // Tuile actuelle où se trouve le joueur
-    private Dictionary<Vector2, GameObject> spawnedTiles = new Dictionary<Vector2, GameObject>();
-    private Queue<GameObject> tilePool = new Queue<GameObject>(); // Pool d'objets pour réutiliser les tuiles
+    private float tileWidth;
+    private float tileHeight;
+
+    private Vector2Int currentPlayerTile;
+    private Dictionary<Vector2Int, GameObject> spawnedTiles = new Dictionary<Vector2Int, GameObject>();
 
     void Start()
     {
-        if (parentTransform == null)
+        Renderer renderer = groundPrefab.GetComponent<Renderer>();
+        if (renderer != null)
         {
-            parentTransform = new GameObject("GroundContainer").transform;
+            tileWidth = renderer.bounds.size.x;
+            tileHeight = renderer.bounds.size.y;
+        }
+        else
+        {
+            Debug.LogError("Ground prefab does not have a Renderer component.");
+            return;
         }
 
-        currentTile = GetTilePosition(player.position);
-        PreloadTiles();
-
-        // Générer les tuiles autour du joueur (sans la tuile centrale)
-        GenerateGround(currentTile);
+        currentPlayerTile = GetTileCoords(player.position);
+        SpawnInitialGrid();
     }
 
     void Update()
     {
-        Vector2 newTile = GetTilePosition(player.position);
-
-        // Si la position du joueur a changé (il a bougé)
-        if (newTile != currentTile)
+        Vector2Int newPlayerTile = GetTileCoords(player.position);
+        if (newPlayerTile != currentPlayerTile)
         {
-            currentTile = newTile;
-            GenerateGround(newTile);  // Générer les nouvelles tuiles autour du joueur
-            CleanUpTiles();
+            currentPlayerTile = newPlayerTile;
+            UpdateGrid();
         }
     }
 
-    Vector2 GetTilePosition(Vector3 position)
+    Vector2Int GetTileCoords(Vector3 position)
     {
-        return new Vector2(
-            Mathf.Floor(position.x / tileSize),
-            Mathf.Floor(position.y / tileSize)
-        );
+        int x = Mathf.FloorToInt(position.x / tileWidth);
+        int y = Mathf.FloorToInt(position.y / tileHeight);
+        return new Vector2Int(x, y);
     }
 
-    void PreloadTiles()
+    void SpawnInitialGrid()
     {
-        for (int i = 0; i < poolSize; i++)
+        for (int x = -gridSize / 2; x <= gridSize / 2; x++)
         {
-            GameObject newTile = Instantiate(groundPrefab, Vector3.zero, Quaternion.identity, parentTransform);
-            newTile.SetActive(false); // Désactiver les tuiles inutilisées
-            tilePool.Enqueue(newTile);
-        }
-    }
-
-    void GenerateGround(Vector2 centerTile)
-    {
-        // Générer la tuile à gauche
-        Vector2 leftTile = centerTile + Vector2.left;  // Déplacement à gauche
-        CreateTileAtPosition(leftTile);
-
-        // Générer la tuile à droite
-        Vector2 rightTile = centerTile + Vector2.right;  // Déplacement à droite
-        CreateTileAtPosition(rightTile);
-
-        // Générer la tuile en haut
-        Vector2 upTile = centerTile + Vector2.up;  // Déplacement vers le haut
-        CreateTileAtPosition(upTile);
-
-        // Générer la tuile en bas
-        Vector2 downTile = centerTile + Vector2.down;  // Déplacement vers le bas
-        CreateTileAtPosition(downTile);
-    }
-
-    void CreateTileAtPosition(Vector2 tilePos)
-    {
-        // Vérifier si la tuile existe déjà
-        if (!spawnedTiles.ContainsKey(tilePos))
-        {
-            Vector3 worldPos = new Vector3(tilePos.x * tileSize, tilePos.y * tileSize, 0);
-            GameObject newTile = GetTileFromPool();  // Récupérer une tuile du pool
-            newTile.transform.position = worldPos;
-            newTile.SetActive(true);
-            spawnedTiles[tilePos] = newTile;  // Ajouter la tuile à la liste des tuiles générées
-        }
-    }
-
-    void CleanUpTiles()
-    {
-        List<Vector2> tilesToRemove = new List<Vector2>();
-
-        foreach (var tile in spawnedTiles)
-        {
-            float distance = Vector2.Distance(tile.Key, currentTile);
-            if (distance > 1)  // Si la tuile est trop loin du joueur (selon la vue)
+            for (int y = -gridSize / 2; y <= gridSize / 2; y++)
             {
-                tilesToRemove.Add(tile.Key);
+                Vector2Int tileCoord = new Vector2Int(currentPlayerTile.x + x, currentPlayerTile.y + y);
+                SpawnTileAt(tileCoord);
+            }
+        }
+    }
+
+    void UpdateGrid()
+    {
+        // Tiles to keep (3x3 around currentPlayerTile)
+        HashSet<Vector2Int> newTiles = new HashSet<Vector2Int>();
+
+        for (int x = -gridSize / 2; x <= gridSize / 2; x++)
+        {
+            for (int y = -gridSize / 2; y <= gridSize / 2; y++)
+            {
+                Vector2Int tileCoord = new Vector2Int(currentPlayerTile.x + x, currentPlayerTile.y + y);
+                newTiles.Add(tileCoord);
+                if (!spawnedTiles.ContainsKey(tileCoord))
+                {
+                    SpawnTileAt(tileCoord);
+                }
             }
         }
 
-        foreach (var tilePos in tilesToRemove)
+        // Remove tiles that are not in the newTiles set
+        List<Vector2Int> tilesToRemove = new List<Vector2Int>();
+        foreach (var tile in spawnedTiles.Keys)
         {
-            GameObject tile = spawnedTiles[tilePos];
-            tile.SetActive(false); // Désactiver la tuile au lieu de la détruire
-            tilePool.Enqueue(tile); // La remettre dans le pool
-            spawnedTiles.Remove(tilePos);
+            if (!newTiles.Contains(tile))
+                tilesToRemove.Add(tile);
+        }
+
+        foreach (var tileCoord in tilesToRemove)
+        {
+            Destroy(spawnedTiles[tileCoord]);
+            spawnedTiles.Remove(tileCoord);
         }
     }
 
-    GameObject GetTileFromPool()
+    void SpawnTileAt(Vector2Int tileCoord)
     {
-        if (tilePool.Count > 0)
-        {
-            return tilePool.Dequeue();
-        }
-        return Instantiate(groundPrefab, Vector3.zero, Quaternion.identity, parentTransform);
+        Vector3 spawnPos = new Vector3(tileCoord.x * tileWidth, tileCoord.y * tileHeight, 0);
+        GameObject tile = Instantiate(groundPrefab, spawnPos, Quaternion.identity);
+        spawnedTiles.Add(tileCoord, tile);
     }
 }

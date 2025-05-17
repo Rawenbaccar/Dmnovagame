@@ -28,6 +28,31 @@ public class EnemySpawner : MonoBehaviour
 
         Init();
         unlockedEnemies.Add(enemyTypes.enemyTypes[0].enemyPrefab);
+
+        // Subscribe to level up event
+        if (ExperienceLevelController.instance != null)
+        {
+            ExperienceLevelController.instance.OnLevelUp += OnLevelUp;
+        }
+        else
+        {
+            Debug.LogError("ExperienceLevelController instance not found!");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe when the object is destroyed
+        if (ExperienceLevelController.instance != null)
+        {
+            ExperienceLevelController.instance.OnLevelUp -= OnLevelUp;
+        }
+    }
+
+    private void OnLevelUp(int newLevel)
+    {
+        currentLevel = newLevel;
+        Debug.Log($"EnemySpawner: Level updated to {currentLevel}");
     }
 
     void Update()
@@ -69,17 +94,20 @@ public class EnemySpawner : MonoBehaviour
         // Check if we should spawn boss at level 8
         if (currentLevel == 8 && !hasBossSpawned)
         {
+            Debug.Log($"Attempting to spawn boss at level 8. Current level: {currentLevel}, hasBossSpawned: {hasBossSpawned}");
             // Find the boss prefab
             foreach (var enemyType in enemyTypes.enemyTypes)
             {
                 if (enemyType.isBoss)
                 {
+                    Debug.Log("Found boss prefab, spawning boss!");
                     Instantiate(enemyType.enemyPrefab, spawnPosition, Quaternion.identity);
                     hasBossSpawned = true;
                     Debug.Log("Boss spawned at level 8!");
                     return;
                 }
             }
+            Debug.LogWarning("No boss prefab found in enemyTypes!");
         }
 
         // Choose which enemy to spawn
@@ -97,7 +125,7 @@ public class EnemySpawner : MonoBehaviour
                 }
                 return;
             }
-            
+
             // Spawn regular enemy
             Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity);
         }

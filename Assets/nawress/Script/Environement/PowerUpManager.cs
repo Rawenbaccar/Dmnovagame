@@ -48,10 +48,15 @@ public class PowerUpManager : MonoBehaviour
     {
         if (fireball != null)
         {
+            fireball.gameObject.SetActive(true); // Activer la Fireball
             fireball.ActivateFireball();
         }
         powerUpPanel.SetActive(false);
     }
+
+
+
+
 
     public void ApplyMagnetPowerUp()
     {
