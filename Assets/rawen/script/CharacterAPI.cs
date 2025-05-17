@@ -5,7 +5,7 @@ using System.Collections;
 public class CharacterAPI : MonoBehaviour
 {
     private string url = "http://localhost:8000/api/v1/items/add/";
-    private string accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1OTIxOTQzLCJpYXQiOjE3NDU5MTgzNDMsImp0aSI6ImEzZjVkNmY5YTVjZjQ3ZGI4MjNlYWU2NTQwM2QxZjNkIiwidXNlcl9pZCI6MywidXNlciI6eyJpZCI6MywiZW1haWwiOiJib3RpQGdtYWlsLmNvbSIsImlzX3N0YWZmIjpmYWxzZX19.pHxSEOZNs--LOazlyvUz2J-tckgwGHZSQRf9s_m7E0E";
+    private string accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NTExNjU4LCJpYXQiOjE3NDc1MDgwNTgsImp0aSI6ImEzZTBiZmEwMDUyYjRjY2I4OTY4Mjk5YTAzMjYyZDgxIiwidXNlcl9pZCI6MywidXNlciI6eyJpZCI6MywiZW1haWwiOiJib3RpQGdtYWlsLmNvbSIsImlzX3N0YWZmIjpmYWxzZX19.q3fjvtGMGATzk7Z8TKGefHJiftAp_l4EWofO3JMbLGI";
 
     // Method to send the request with the item's name
     public void AddItem(string itemName)

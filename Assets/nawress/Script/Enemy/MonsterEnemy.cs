@@ -4,8 +4,8 @@ public class MonsterEnemy : MonoBehaviour
 {
     [Header("Health")]
     public float baseMaxHealth = 5f;
-    private float currentHealth;
-    private float maxHealth;
+    public float currentHealth;
+    public float maxHealth;
 
     [Header("Combat")]
     public GameObject acidPuddlePrefab; // Acid puddle prefab
@@ -27,6 +27,7 @@ public class MonsterEnemy : MonoBehaviour
         if (EnemyHealthManager.Instance != null)
         {
             maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
+            Debug.Log("el healthito managerito yemchito" + maxHealth.ToString());
         }
         else
         {
@@ -46,11 +47,18 @@ public class MonsterEnemy : MonoBehaviour
         if (distanceToPlayer > attackRange)
         {
             MoveTowardsPlayer();
-            animator.SetBool("isWalking", true); // Set walking animation
+            if (animator != null)
+            {
+                animator.SetBool("isWalking", true); // Set walking animation
+            }
         }
         else
         {
-            animator.SetBool("isWalking", false); // Stop walking animation
+            if (animator != null)
+            {
+                animator.SetBool("isWalking", false); // Stop walking animation
+            }
+
         }
 
         // Attack if in range and cooldown has passed
@@ -71,14 +79,27 @@ public class MonsterEnemy : MonoBehaviour
     void Attack()
     {
         // Trigger the attack animation
-        animator.SetTrigger("Attack");
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, HorroEnemy horroEnemy, GameObject diamond)
     {
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            if (horroEnemy != null)
+            {
+                // Call the Die() function, which will spawn the acid puddle
+                horroEnemy.Die();
+            }
+            if (diamond != null)
+            {
+                GameObject SpawnedMonster = Instantiate(diamond, transform.position, Quaternion.identity);
+                SpawnedMonster.tag = "Diamond";
+            }
             Die();
         }
     }

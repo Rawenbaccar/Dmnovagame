@@ -26,23 +26,12 @@ public class EnemyControllerr : MonoBehaviour
             if (monsterEnemy != null)
             {
                 // Call the Die() function, which will spawn the acid puddle
-                monsterEnemy.Die();
+
+
+                monsterEnemy.TakeDamage(1, horroEnemy, deathEffectPrefab);
+
             }
 
-            if (horroEnemy != null)
-            {
-                // Call the Die() function, which will spawn the acid puddle
-                horroEnemy.Die();
-            }
-            // Optionally, you can still instantiate death effects here if you need them
-            if (deathEffectPrefab != null)
-            {
-                GameObject SpawnedMonster = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
-                SpawnedMonster.tag = "Diamond";
-            }
-
-            // Destroy the enemy object after calling Die()
-            Destroy(gameObject);
         }
     }
 

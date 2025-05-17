@@ -6,15 +6,20 @@ public class EnemyHealthManager : MonoBehaviour
     public static EnemyHealthManager Instance { get; private set; }
 
     [Header("Health Scaling")]
-    public float healthMultiplier = 1f;          // Current health multiplier
-    public float increasePerLevel = 0.2f;        // 20% increase per level
-    public float increasePerInterval = 0.1f;     // 10% increase every interval
-    public float intervalTime = 15f;             // Time between automatic increases (15 seconds)
+    public float healthMultiplier;          // Current health multiplier
+    public float increasePerLevel;        // 20% increase per level
+    public float increasePerInterval;     // 10% increase every interval
+    public float intervalTime;             // Time between automatic increases (15 seconds)
 
-    private bool isAutoScalingActive = false;    // Becomes true at level 13
+    public bool isAutoScalingActive = true;    // Becomes true at level 13
     private float timer = 0f;
     private int currentLevel = 1;
 
+
+    public void Start()
+    {
+        EnemyHealthManager.Instance = this;
+    }
     private void Update()
     {
         // After level 13, increase health every 15 seconds
@@ -34,9 +39,9 @@ public class EnemyHealthManager : MonoBehaviour
     public void OnPlayerLevelUp(int newLevel)
     {
         currentLevel = newLevel;
-        
+
         // Only start scaling health at level 13
-        if (currentLevel >= 2)
+        if (currentLevel >= 13)
         {
             // First time reaching level 13
             if (!isAutoScalingActive)
@@ -47,11 +52,11 @@ public class EnemyHealthManager : MonoBehaviour
                 healthMultiplier = 1f;
                 Debug.Log("Auto-scaling activated: Enemy health will now increase every 15 seconds");
             }
-            
+
             // Increase health multiplier
             IncreaseHealthMultiplier(increasePerLevel);
         }
-        
+
         Debug.Log($"Level {newLevel}: Enemy health multiplier is now {healthMultiplier}");
     }
 
@@ -63,11 +68,6 @@ public class EnemyHealthManager : MonoBehaviour
     // Call this to get the current health multiplier for new enemies
     public float GetHealthMultiplier()
     {
-        // Return 1 (no multiplier) before level 13
-        if (currentLevel < 13)
-        {
-            return 1f;
-        }
         return healthMultiplier;
     }
 }

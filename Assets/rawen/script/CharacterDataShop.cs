@@ -17,5 +17,5 @@ public class CharacterDataShop : ScriptableObject
     public int priceValue;
     public Sprite[] statIcons;
 
-    [HideInInspector] public bool isUnlocked = false; 
+    public bool isUnlocked = true; 
 }

@@ -4,88 +4,20 @@ using System.Collections; // Nécessaire pour utiliser les coroutines
 
 public class WolfHealthController : MonoBehaviour
 {
-    public static GameObject deathEffectPrefab;
-    [SerializeField] private float baseMaxHealth = 3f;
-    [SerializeField] private float currentHealth;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private float knockbackDistance = 1f; // Distance du recul
     [SerializeField] private float knockbackDuration = 0.2f; // Durée du recul
 
     private bool isKnockedBack = false; // Empêche les interruptions de recul
-    private float maxHealth;
-
-    void Start()
-    {
-        // Apply health scaling
-        if (EnemyHealthManager.Instance != null)
-        {
-            maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
-        }
-        else
-        {
-            maxHealth = baseMaxHealth;
-        }
-        
-        currentHealth = maxHealth;
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-        }
-
-        if (deathEffectPrefab == null)
-        {
-            deathEffectPrefab = Resources.Load<GameObject>("sprite");
-        }
-    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("WhipAttack") || collision.CompareTag("WhipAttack1") || collision.CompareTag("FireBall") || collision.CompareTag("WhipUpgrade") || collision.CompareTag("knife"))
+        // Appliquer le recul
+        if (!isKnockedBack)
         {
-            if (deathEffectPrefab != null)
-            {
-                Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
-            }
-
-            TakeDamage(1);
-
-            // Appliquer le recul
-            if (!isKnockedBack)
-            {
-                StartCoroutine(Knockback(collision.transform));
-            }
+            StartCoroutine(Knockback(collision.transform));
         }
     }
-
-    private void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        UpdateHealthSlider();
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void UpdateHealthSlider()
-    {
-        if (healthSlider != null)
-        {
-            healthSlider.value = currentHealth;
-        }
-        else
-        {
-            Debug.LogError("Health Slider is not assigned!");
-        }
-    }
-
-    private void Die()
-    {
-        Destroy(gameObject);
-    }
-
     private IEnumerator Knockback(Transform attacker)
     {
         isKnockedBack = true; // Bloque les interruptions de recul
