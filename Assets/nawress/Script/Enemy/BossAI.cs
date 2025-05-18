@@ -10,7 +10,7 @@ public class BossAI : MonoBehaviour
     public float teleportCooldown = 5f; // Time between each teleport
     public GameObject clonePrefab; // The clone prefab
     private float teleportTimer; // Timer to track teleport cooldown
-    public float animationCooldown = 5f; // Temps entre chaque animation (change à 8f si tu veux)
+    public float animationCooldown = 5f; // Temps entre chaque animation
     private float animationTimer; // Timer pour suivre le temps
 
     void Start()
@@ -32,18 +32,11 @@ public class BossAI : MonoBehaviour
         // Handle teleportation logic
         HandleTeleportation();
 
-        // Check if the "D" key is pressed to simulate boss death
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log("Boss has died!"); // Simulate boss death
-            return; // Exit the Update method if the boss is dead
-        }
-
         // Decrease animation cooldown timer
         animationTimer -= Time.deltaTime;
 
         // Check animation cooldown value
-        Debug.Log("Animation Timer: " + animationTimer);
+        //Debug.Log("Animation Timer: " + animationTimer);
 
         // Check if it's time to play the animation
         if (animationTimer <= 0f)
@@ -102,18 +95,46 @@ public class BossAI : MonoBehaviour
 
     void SpawnClones()
     {
-        int numClones = Random.Range(2, 5); // Spawn 2 to 5 clones
+        // Spawn 3 clones fixed near the boss
+        Vector2 offset = new Vector2(1f, 0f); // Adjust the distance between clones (adjust as needed)
 
-        for (int i = 0; i < numClones; i++)
+        // Ensure the boss position is treated as a Vector2 for subtraction
+        Vector2 bossPosition = new Vector2(transform.position.x, transform.position.y);
+
+        Vector2 clonePosition1 = bossPosition + offset;
+        Vector2 clonePosition2 = bossPosition - offset;
+        Vector2 clonePosition3 = bossPosition + new Vector2(0f, 1f); // Add another clone a bit higher
+
+        // Instantiate the clones
+        GameObject clone1 = Instantiate(clonePrefab, clonePosition1, Quaternion.identity);
+        GameObject clone2 = Instantiate(clonePrefab, clonePosition2, Quaternion.identity);
+        GameObject clone3 = Instantiate(clonePrefab, clonePosition3, Quaternion.identity);
+
+        // Make sure the clones don't fall by disabling gravity
+        Rigidbody2D rb1 = clone1.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb2 = clone2.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb3 = clone3.GetComponent<Rigidbody2D>();
+
+        if (rb1 != null)
+            rb1.gravityScale = 0; // Disable gravity on the clone
+        if (rb2 != null)
+            rb2.gravityScale = 0; // Disable gravity on the clone
+        if (rb3 != null)
+            rb3.gravityScale = 0; // Disable gravity on the clone
+
+        // Debug to confirm clones are spawned
+        Debug.Log("Clones Spawned Near Boss!");
+    }
+
+
+
+    public void DisableBossAI()
+    {
+        if (bossAnimator != null)
         {
-            // Pick a random position near the boss
-            Vector2 clonePosition = new Vector2(
-                transform.position.x + Random.Range(-2f, 2f),
-                transform.position.y + Random.Range(-2f, 2f)
-            );
-
-            // Instantiate a clone
-            Instantiate(clonePrefab, clonePosition, Quaternion.identity);
+            bossAnimator.SetTrigger("Dead"); // Play the death animation
         }
+
+        this.enabled = false; // Completely disable BossAI script
     }
 }

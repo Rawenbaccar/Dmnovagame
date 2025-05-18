@@ -5,6 +5,10 @@ using TMPro;
 
 public class ExperienceLevelController : MonoBehaviour
 {
+    // Event for level up
+    public delegate void LevelUpHandler(int newLevel);
+    public event LevelUpHandler OnLevelUp;
+
     // Utilisation du pattern Singleton avec vérification de nullité
     private static ExperienceLevelController _instance;
     public static ExperienceLevelController instance
@@ -20,9 +24,9 @@ public class ExperienceLevelController : MonoBehaviour
     }
 
     [Header("Level Settings")]
-    [SerializeField] private int currentLevel = 1;
-    [SerializeField] private int diamondsPerLevel = 5;
-    [SerializeField] private int collectedDiamonds = 0;
+    [SerializeField] public int currentLevel = 1;
+    [SerializeField] private int diamondsPerLevel;
+    [SerializeField] private int collectedDiamonds;
 
     [Header("UI References")]
     [SerializeField] private Slider expSlider;
@@ -34,8 +38,11 @@ public class ExperienceLevelController : MonoBehaviour
     public float targetSliderValue = 0f;
     public float currentSliderValue = 0f;
 
-    [Header("Enemy Spawner")]
+    [Header("Enemy Management")]
     [SerializeField] private EnemySpawner enemySpawner; // Reference to the EnemySpawner
+    [SerializeField] private GroundChange groundChange;
+    [SerializeField] private CoinManager coinManager;
+
 
     private void Awake()
     {
@@ -54,6 +61,10 @@ public class ExperienceLevelController : MonoBehaviour
         if (powerUpPanel != null)
             powerUpPanel.SetActive(false);
         UpdateUI();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); //  Spawn 3 pièces dès le départ
+        }
     }
 
     private void Update()
@@ -61,10 +72,10 @@ public class ExperienceLevelController : MonoBehaviour
         // Animation fluide du slider
         if (currentSliderValue != targetSliderValue)
         {
-
+            //Debug.Log("wuuut ?");
             //currentSliderValue = Mathf.Lerp(currentSliderValue, targetSliderValue, Time.deltaTime * sliderSpeed);
-            currentSliderValue += 0.2f;
-            expSlider.value = currentSliderValue;
+            //currentSliderValue += 0.2f;
+            expSlider.value = (float)collectedDiamonds / diamondsPerLevel;
 
             if (expSlider.value >= 0.999f)
             {
@@ -127,19 +138,45 @@ public class ExperienceLevelController : MonoBehaviour
     private void LevelUp()
     {
         this.currentLevel++;
+
+        // Update enemy spawner's level
+        if (enemySpawner != null)
+        {
+            enemySpawner.SetLevel(this.currentLevel);
+            Debug.Log($"Updated EnemySpawner level to {this.currentLevel}");
+        }
+        else
+        {
+            Debug.LogError("EnemySpawner reference is missing in ExperienceLevelController!");
+        }
+
+        // Trigger the level up event
+        OnLevelUp?.Invoke(this.currentLevel);
+
+        // Update enemy health scaling
+        if (EnemyHealthManager.Instance != null)
+        {
+            EnemyHealthManager.Instance.OnPlayerLevelUp(this.currentLevel);
+        }
+
         UpdateUI();
-        SpawnNewEnemyType(); // Spawn new enemy type when leveling up
-        AudioManager.PlayLevelChangeSound(); // Play level change sound on death
-
-
-
+        SpawnNewEnemyType();
+        AudioManager.PlayLevelChangeSound();
+        if (coinManager != null)
+        {
+            coinManager.SpawnCoins(); // ➕ Spawn 3 nouvelles pièces
+        }
+        if (groundChange != null)
+        {
+            groundChange.OnLevelUp();
+        }
     }
 
     private void SpawnNewEnemyType()
     {
         if (enemySpawner != null)
         {
-            Debug.Log("🔄 Trying to unlock a new enemy...");
+
             enemySpawner.UnlockNewEnemy();
         }
         if (AudioManager.Instance != null)

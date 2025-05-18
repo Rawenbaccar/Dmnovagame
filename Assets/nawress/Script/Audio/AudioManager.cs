@@ -6,22 +6,22 @@ public class AudioManager : MonoBehaviour
     [Header(" Music Settings")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioClip[] levelMusicTracks;
-    [Range(0f, 1f)] [SerializeField] private float musicVolume = 0.3f;
+    [Range(0f, 1f)] [SerializeField] private float musicVolume = 1f;
 
     [Header(" Sound Effects")]
     [SerializeField] private AudioSource sfxSource;
 
     [Header(" Level Change Sound")]
     [SerializeField] private AudioClip levelChangeSound;
-    [Range(0f, 1f)] [SerializeField] private float levelChangeVolume = 0.8f;
+    [Range(0f, 1f)] [SerializeField] private float levelChangeVolume = 1f;
 
     [Header(" Game Over Sound")]
     [SerializeField] private AudioClip gameOverSound;
-    [Range(0f, 1f)] [SerializeField] private float gameOverVolume = 0.8f;
+    [Range(0f, 1f)] [SerializeField] private float gameOverVolume = 1f;
 
     [Header(" Button Click Sound")]
     [SerializeField] private AudioClip buttonClickSound;
-    [Range(0f, 1f)] [SerializeField] private float buttonClickVolume = 0.7f;
+    [Range(0f, 1f)] [SerializeField] private float buttonClickVolume = 1f;
 
 
     private static AudioManager instance;
@@ -112,4 +112,13 @@ public class AudioManager : MonoBehaviour
     // ============= GET INSTANCE =============
 
     public static AudioManager Instance => instance;
+
+    // Add method to stop background music
+    public static void StopBackgroundMusic()
+    {
+        if (instance != null && instance.musicSource != null)
+        {
+            instance.musicSource.Stop();
+        }
+    }
 }

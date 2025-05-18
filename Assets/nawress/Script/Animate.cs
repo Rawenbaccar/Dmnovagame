@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,27 +15,23 @@ public class Animate : MonoBehaviour
     }
     #endregion
 
-
-
     #region private variable
     private Animator animator;
-    private  float horizontal;
-    private  SpriteRenderer spriteRenderer;
+    private float horizontal;
+    private SpriteRenderer spriteRenderer;
     #endregion
-
 
     #region CallBacks
     private void Awake()
     {
         Init();
     }
-    // Update is called once per frame
+
     void Update()
     {
         Animat();
     }
     #endregion
-
 
     #region private functions
     private void Init()
@@ -46,11 +42,23 @@ public class Animate : MonoBehaviour
 
     private void Animat()
     {
-       // animator.SetFloat("Horizontal", Mathf.Abs(horizontal));
+        // animator.SetFloat("Horizontal", Mathf.Abs(horizontal));
 
         if (horizontal != 0)
         {
             spriteRenderer.flipX = (horizontal < 0);
+        }
+    }
+
+    //  Nouvelle méthode appelée depuis PlayerMovement
+    public void MoveAnimation(Vector2 direction)
+    {
+        horizontal = direction.x; // ← utile pour flip
+        if (animator != null)
+        {
+            animator.SetFloat("Horizontal", direction.x);
+            animator.SetFloat("Vertical", direction.y);
+            animator.SetFloat("Speed", direction.sqrMagnitude);
         }
     }
     #endregion
