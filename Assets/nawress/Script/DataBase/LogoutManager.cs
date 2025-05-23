@@ -22,7 +22,7 @@ public class LogoutManager : MonoBehaviour
 
     private IEnumerator LogoutCoroutine()
     {
-        string url = "http://localhost:8000/auth/logout/";
+        string url = "http://51.255.29.221:8866/auth/logout/";
         string refreshToken = AuthManager.Instance.GetRefreshToken();
 
         if (string.IsNullOrEmpty(refreshToken))

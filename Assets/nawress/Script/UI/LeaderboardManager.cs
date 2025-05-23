@@ -102,7 +102,7 @@ public class LeaderboardManager : MonoBehaviour
             yield break;
         }
 
-        string url = "http://localhost:8000/api/v1/leaderboard";
+        string url = "http://51.255.29.221:8866/api/v1/leaderboard";
 
         while (true)
         {

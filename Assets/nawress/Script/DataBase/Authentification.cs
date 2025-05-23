@@ -65,7 +65,7 @@ public class Authentification : MonoBehaviour
     [SerializeField] private Button switchToLoginButton;   // "Login" link in signup panel
 
     [Header("API Settings")]
-    private string baseUrl = "http://localhost:8000"; // Base URL without endpoints
+    private string baseUrl = "http://51.255.29.221:8866"; // Base URL without endpoints
 
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "GameScene";  // Add this to set your game scene name

@@ -1,0 +1,58 @@
+@startuml Game Management System
+
+skinparam usecase {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  ArrowColor Black
+}
+
+actor "Player" as player
+
+rectangle "Game System" {
+    package "Game Management" {
+        usecase "Start Game" as startGame
+        usecase "Pause Game" as pauseGame
+        usecase "Resume Game" as resumeGame
+        usecase "Save Game State" as saveGame
+        usecase "Load Game State" as loadGame
+        usecase "Quit Game" as quitGame
+    }
+
+    package "Player Actions" {
+        usecase "Move Character" as moveChar
+        usecase "Interact with Objects" as interact
+        usecase "Access Inventory" as inventory
+        usecase "View Stats" as stats
+    }
+
+    package "Game State" {
+        usecase "Update Score" as updateScore
+        usecase "Manage Level Progress" as levelProgress
+        usecase "Handle Achievements" as achievements
+    }
+}
+
+' Player connections to direct actions
+player --> moveChar
+player --> interact
+player --> inventory
+player --> stats
+
+' Player connections to game management
+player --> startGame
+player --> pauseGame
+player --> resumeGame
+player --> quitGame
+
+' Game state relationships
+moveChar ..> updateScore : <<include>>
+interact ..> updateScore : <<include>>
+startGame ..> levelProgress : <<include>>
+interact ..> achievements : <<extend>>
+
+' Game management relationships
+pauseGame ..> saveGame : <<include>>
+resumeGame ..> loadGame : <<include>>
+quitGame ..> saveGame : <<include>>
+
+@enduml 

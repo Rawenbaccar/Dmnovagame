@@ -74,7 +74,7 @@ public class AuthManager : MonoBehaviour
     }
 
     [Header("API Settings")]
-    private string baseUrl = "http://localhost:8000";  // Make sure this matches your API URL
+    private string baseUrl = "http://51.255.29.221:8866";  // Make sure this matches your API URL
 
     private string accessToken;
     private string refreshToken;
