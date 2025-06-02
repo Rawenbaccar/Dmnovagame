@@ -1,0 +1,55 @@
+@startuml
+scale 1.2
+
+skinparam roundCorner 15
+skinparam defaultTextAlignment center
+skinparam ArrowColor black
+skinparam backgroundColor white
+skinparam Activity {
+  BackgroundColor white
+  BorderColor black
+  FontStyle bold
+  FontSize 14
+  FontName Arial
+}
+
+skinparam noteFontSize 12
+skinparam ArrowFontSize 12
+skinparam defaultFontSize 14
+skinparam defaultFontName Arial
+
+start
+
+: Joueur termine un niveau;
+: Le jeu déclenche la sélection de power-ups;
+: SélecteurPowerUpAléatoire choisit 3 power-ups;
+note right : Parmi les 10 disponibles
+: Affichage du panneau de sélection;
+note right : Le jeu est mis en pause
+: Joueur sélectionne un power-up;
+: Fermeture du panneau et reprise du jeu;
+
+: Type de power-up;
+
+split
+  :<b>AIMANT</b>;
+  : Activation de l'effet d'aimant;
+  : Attraction des objets à proximité;
+  : Collecte automatique des diamants;
+split again
+  :<b>BOULE DE FEU</b>;
+  : Création de boules de feu en orbite;
+  : Rotation autour du joueur;
+  : Application de dégâts aux ennemis touchés;
+split again
+  :<b>GEL</b>;
+  : Application de l'effet de gel;
+  : Immobilisation temporaire des ennemis;
+  : Effet visuel de givre sur les ennemis;
+end split
+
+: Effet actif pendant la durée définie;
+: Fin de l'effet après expiration du timer;
+
+stop
+@enduml 

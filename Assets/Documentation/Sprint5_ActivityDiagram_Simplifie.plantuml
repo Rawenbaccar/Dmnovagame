@@ -1,0 +1,61 @@
+@startuml Sprint5_ActivityDiagram_Simplifie
+
+title Sprint 5: Connexion, Inscription, Boutique et Classement
+
+' Définition des couleurs pour les activités
+skinparam activityBackgroundColor<<Utilisateur>> LightYellow
+skinparam activityBackgroundColor<<Système>> LightBlue
+
+' Point de départ
+start
+
+' Flux d'authentification
+:Écran d'Accueil><<Utilisateur>>;
+
+if (Possède un Compte?) then (oui)
+  :Connexion><<Utilisateur>>;
+  if (Authentification Réussie?) then (oui)
+    :Stocker Jeton d'Auth><<Système>>;
+  else (non)
+    :Afficher Erreur><<Système>>;
+    :Retour à la Connexion><<Utilisateur>>;
+  endif
+else (non)
+  :Inscription><<Utilisateur>>;
+  if (Compte Créé?) then (oui)
+    :Afficher Message de Succès><<Système>>;
+  else (non)
+    :Afficher Erreur><<Système>>;
+    :Retour à l'Inscription><<Utilisateur>>;
+  endif
+endif
+
+' Menu principal et options
+:Menu Principal><<Utilisateur>>;
+
+' Utilisation de fork au lieu de split pour la compatibilité
+fork
+  :Jouer><<Utilisateur>>;
+  :Session de Jeu><<Utilisateur>>;
+  :Soumettre Score><<Système>>;
+  :Retour au Menu><<Utilisateur>>;
+fork again
+  :Boutique><<Utilisateur>>;
+  :Sélectionner Article><<Utilisateur>>;
+  if (Monnaie Suffisante?) then (oui)
+    :Acheter Article><<Système>>;
+  else (non)
+    :Afficher Erreur><<Système>>;
+  endif
+  :Retour au Menu><<Utilisateur>>;
+fork again
+  :Classement><<Utilisateur>>;
+  :Afficher Rangs des Joueurs><<Système>>;
+  :Retour au Menu><<Utilisateur>>;
+fork again
+  :Quitter><<Utilisateur>>;
+  :Déconnexion><<Système>>;
+  stop
+end fork
+
+@enduml 

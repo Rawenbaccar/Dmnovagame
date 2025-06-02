@@ -1,0 +1,97 @@
+@startuml Sprint5_ActivityDiagram
+
+title Sprint 5: Connexion, Inscription, Boutique et Classement
+
+|Utilisateur|
+start
+:Écran d'Accueil;
+
+if (Possède un Compte?) then (oui)
+  :Afficher Formulaire de Connexion;
+  :Saisir Nom d'Utilisateur, Mot de Passe;
+  :Valider Formulaire;
+  if (Formulaire Valide?) then (oui)
+    |Système|
+    :Envoyer au Serveur;
+    if (Authentification Réussie?) then (oui)
+      :Stocker Jeton d'Auth;
+      |Utilisateur|
+      :Écran du Menu Principal;
+    else (non)
+      :Afficher Erreur;
+      :Retour au Formulaire;
+      backward :Saisir Nom d'Utilisateur, Mot de Passe;
+    endif
+  else (non)
+    :Afficher Message d'Erreur;
+    :Retour au Formulaire;
+    backward :Saisir Nom d'Utilisateur, Mot de Passe;
+  endif
+else (non)
+  :Afficher Formulaire d'Inscription;
+  :Saisir Nom d'Utilisateur, Email, Mot de Passe;
+  :Valider Formulaire;
+  if (Formulaire Valide?) then (oui)
+    |Système|
+    :Envoyer au Serveur;
+    if (Compte Créé?) then (oui)
+      :Afficher Message de Succès;
+      |Utilisateur|
+      :Afficher Formulaire de Connexion;
+    else (non)
+      :Afficher Erreur;
+      :Retour au Formulaire;
+      backward :Saisir Nom d'Utilisateur, Email, Mot de Passe;
+    endif
+  else (non)
+    :Afficher Message d'Erreur;
+    :Retour au Formulaire;
+    backward :Saisir Nom d'Utilisateur, Email, Mot de Passe;
+  endif
+endif
+
+|Utilisateur|
+:Écran du Menu Principal;
+
+fork
+  :Démarrer Jeu;
+  :Session de Jeu;
+  :Fin de Partie;
+  |Système|
+  :Soumettre Score;
+  |Utilisateur|
+  :Retour au Menu Principal;
+fork again
+  :Boutique;
+  :Interface Boutique;
+  :Parcourir Articles;
+  :Sélectionner Article;
+  if (Monnaie Suffisante?) then (oui)
+    |Système|
+    :Acheter Article;
+    :Mettre à Jour Inventaire;
+    |Utilisateur|
+  else (non)
+    :Afficher Erreur;
+  endif
+  :Retour à la Boutique;
+  :Retour au Menu Principal;
+fork again
+  :Classement;
+  |Système|
+  :Afficher Classement;
+  :Afficher Rangs des Joueurs;
+  :Afficher Rang Utilisateur Actuel;
+  |Utilisateur|
+  :Retour au Menu Principal;
+fork again
+  :Quitter;
+  |Système|
+  :Déconnexion;
+  stop
+endfork
+
+:Écran du Menu Principal;
+backward :Choix Utilisateur;
+
+@enduml 

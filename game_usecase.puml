@@ -1,58 +1,74 @@
-@startuml Game Management System
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
 
 skinparam usecase {
-  BackgroundColor LightBlue
-  BorderColor DarkBlue
-  ArrowColor Black
+  FontSize 16
+  FontStyle bold
+  BackgroundColor white
+  BorderThickness 2
 }
 
-actor "Player" as player
-
-rectangle "Game System" {
-    package "Game Management" {
-        usecase "Start Game" as startGame
-        usecase "Pause Game" as pauseGame
-        usecase "Resume Game" as resumeGame
-        usecase "Save Game State" as saveGame
-        usecase "Load Game State" as loadGame
-        usecase "Quit Game" as quitGame
-    }
-
-    package "Player Actions" {
-        usecase "Move Character" as moveChar
-        usecase "Interact with Objects" as interact
-        usecase "Access Inventory" as inventory
-        usecase "View Stats" as stats
-    }
-
-    package "Game State" {
-        usecase "Update Score" as updateScore
-        usecase "Manage Level Progress" as levelProgress
-        usecase "Handle Achievements" as achievements
-    }
+skinparam note {
+  FontSize 14
+  BackgroundColor white
+  BorderThickness 1
 }
 
-' Player connections to direct actions
-player --> moveChar
-player --> interact
-player --> inventory
-player --> stats
+skinparam actor {
+  FontSize 16
+  FontStyle bold
+}
 
-' Player connections to game management
-player --> startGame
-player --> pauseGame
-player --> resumeGame
-player --> quitGame
+skinparam rectangle {
+  FontSize 18
+  FontStyle bold
+  BorderThickness 2
+}
 
-' Game state relationships
-moveChar ..> updateScore : <<include>>
-interact ..> updateScore : <<include>>
-startGame ..> levelProgress : <<include>>
-interact ..> achievements : <<extend>>
+skinparam arrow {
+  Thickness 2
+}
 
-' Game management relationships
-pauseGame ..> saveGame : <<include>>
-resumeGame ..> loadGame : <<include>>
-quitGame ..> saveGame : <<include>>
+actor joueur
+
+rectangle "Boundless Night Game" {
+    usecase "Jouer" as UC1
+    usecase "Suivre\nles niveaux" as UC2
+    usecase "Suivre\nMouvement" as UC3
+    usecase "Changer\nApparence sol" as UC4
+    usecase "Son niveau\nsupérieur" as UC5
+    usecase "Musique\nambiante" as UC6
+    usecase "Changer\nMusique" as UC7
+    usecase "Générer\nobstacles" as UC8
+    usecase "Générer\nle sol" as UC9
+    
+    note "Changer tous les 3 niveaux" as N1
+    note "Génération continue du terrain" as N2
+    
+    joueur -- UC1
+    UC1 ..> UC2 : <<include>>
+    UC1 ..> UC3 : <<include>>
+    
+    UC2 ..> UC4 : <<extend>>
+    UC2 ..> UC5 : <<extend>>
+    UC2 ..> UC6 : <<extend>>
+    UC2 ..> UC7 : <<extend>>
+    
+    UC5 ..> UC7 : <<include>>
+    UC6 ..> UC7 : <<include>>
+    
+    UC3 ..> UC8 : <<include>>
+    UC3 ..> UC9 : <<include>>
+    
+    N1 .. UC2
+    N2 .. UC1
+    N2 .. UC3
+}
 
 @enduml 

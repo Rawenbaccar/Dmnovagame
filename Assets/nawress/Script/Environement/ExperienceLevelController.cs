@@ -34,7 +34,7 @@ public class ExperienceLevelController : MonoBehaviour
     [SerializeField] private GameObject powerUpPanel; // Référence au panel de power-up
 
     [Header("Slider Animation")]
-    [SerializeField] private float sliderSpeed = 2f; // Vitesse de l'animation du slider
+    //[SerializeField] private float sliderSpeed = 2f; // Vitesse de l'animation du slider
     public float targetSliderValue = 0f;
     public float currentSliderValue = 0f;
 

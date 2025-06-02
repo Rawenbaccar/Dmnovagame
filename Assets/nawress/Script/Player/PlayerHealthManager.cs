@@ -11,10 +11,10 @@ public class PlayerHealthManager : MonoBehaviour
     public Rigidbody2D rb;
     
     #region Private Variables
-    [SerializeField] private float currentHealth;
-    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] public float currentHealth;
+    [SerializeField] public float maxHealth = 100f;
     [SerializeField] private float damageAmount = 3f;
-    [SerializeField] private float attackDamage = 1f; // Added this line for Flower damage
+    //[SerializeField] private float attackDamage = 1f; // Added this line for Flower damage
     [SerializeField] private GameOverScreen gameOverScreen;
     [SerializeField] private SurvivalTimer survivalTimer;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -131,7 +131,7 @@ public class PlayerHealthManager : MonoBehaviour
 
     private IEnumerator UpdateLeaderboard()
     {
-        string url = "http://localhost:8000/api/v1/leaderboard/update/";
+        string url = "http://51.255.29.221:8866/api/v1/leaderboard/update/";
         
         // Convert survival time from float to int (seconds)
         int totalSeconds = Mathf.FloorToInt(survivalTimer.GetSurvivalTime());

@@ -1,0 +1,109 @@
+@startuml Diagramme de Classes
+
+' Configuration du style
+skinparam classAttributeIconSize 0
+skinparam classFontSize 14
+skinparam classAttributeFontSize 12
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam linetype ortho
+
+' Classes principales
+class Joueur {
+  -vitesse: float
+  -niveau: int
+  -experience: float
+  -experienceRequise: float
+  -derniereMouvement: Vector2
+  -tempsDepuisAttaque: float
+  -cooldownAttaque: float
+  +deplacer(direction: Vector2): void
+  +attaquer(): void
+  +gagnerExperience(montant: float): void
+  +monterNiveau(): void
+  +peutAttaquer(): bool
+}
+
+class GestionnaireJeu {
+  -scoreActuel: int
+  -partieEnCours: bool
+  +demarrerPartie(): void
+  +terminerPartie(): void
+  +sauvegarderScore(): void
+  +chargerScore(): void
+}
+
+class SystemeCombat {
+  -degatsBase: float
+  -porteeAttaque: float
+  +calculerDegats(): float
+  +verifierCollision(position: Vector2): bool
+  +appliquerDegats(cible: Ennemi): void
+}
+
+class Ennemi {
+  -pointsDeVie: float
+  -vitesse: float
+  -valeurExperience: float
+  -valeurMonnaie: int
+  +recevoirDegats(degats: float): void
+  +mourir(): void
+  +deplacer(): void
+}
+
+class GestionnaireEnnemis {
+  -tempsEntreSpawns: float
+  -maxEnnemis: int
+  +spawnEnnemi(): void
+  +supprimerEnnemi(ennemi: Ennemi): void
+  +mettreAJourEnnemis(): void
+}
+
+class SystemeMonnaie {
+  -monnaieActuelle: int
+  +ajouterMonnaie(montant: int): void
+  +retirerMonnaie(montant: int): bool
+  +obtenirMonnaie(): int
+}
+
+class AnimationController {
+  -animationActuelle: string
+  +jouerAnimation(nom: string): void
+  +mettreAJourAnimation(): void
+  +definirDirection(direction: Vector2): void
+}
+
+class Arme {
+  -degats: float
+  -portee: float
+  -cooldown: float
+  +attaquer(position: Vector2, direction: Vector2): void
+  +mettreAJourCooldown(): void
+}
+
+' Relations avec cardinalités et rôles
+' Compositions (relation forte)
+Joueur "1" *-- "1" AnimationController : "contrôle"
+Joueur "1" *-- "1" Arme : "possède"
+
+' Agrégations (relation de contenance)
+GestionnaireJeu "1" o-- "1..*" Joueur : "gère"
+GestionnaireJeu "1" o-- "1" GestionnaireEnnemis : "contrôle"
+GestionnaireEnnemis "1" o-- "0..*" Ennemi : "gère"
+
+' Associations (relations simples)
+Joueur "1" -- "1" SystemeCombat : "utilise"
+SystemeCombat "1" -- "0..*" Ennemi : "affecte"
+Joueur "1" -- "1" SystemeMonnaie : "utilise"
+GestionnaireJeu "1" -- "1" SystemeMonnaie : "gère"
+
+' Dépendances (relations faibles)
+Arme ..> Ennemi : "inflige dégâts"
+SystemeCombat ..> Arme : "utilise"
+AnimationController ..> Joueur : "met à jour"
+
+' Héritage (si nécessaire dans le futur)
+'EnnemiBasique extends Ennemi
+'EnnemiAvance extends Ennemi
+
+@enduml 

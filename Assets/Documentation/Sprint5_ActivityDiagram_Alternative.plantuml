@@ -1,0 +1,88 @@
+@startuml Sprint5_ActivityDiagram_Alternative
+
+title Sprint 5: Connexion, Inscription, Boutique et Classement
+
+skinparam activityBackgroundColor<<Utilisateur>> LightYellow
+skinparam activityBackgroundColor<<Système>> LightBlue
+
+start
+
+:Écran d'Accueil><<Utilisateur>>;
+
+if (Possède un Compte?) then (oui)
+  :Afficher Formulaire de Connexion><<Utilisateur>>;
+  :Saisir Nom d'Utilisateur, Mot de Passe><<Utilisateur>>;
+  :Valider Formulaire><<Utilisateur>>;
+  if (Formulaire Valide?) then (oui)
+    :Envoyer au Serveur><<Système>>;
+    if (Authentification Réussie?) then (oui)
+      :Stocker Jeton d'Auth><<Système>>;
+      :Écran du Menu Principal><<Utilisateur>>;
+    else (non)
+      :Afficher Erreur><<Système>>;
+      :Retour au Formulaire><<Utilisateur>>;
+      backward :Saisir Nom d'Utilisateur, Mot de Passe><<Utilisateur>>;
+    endif
+  else (non)
+    :Afficher Message d'Erreur><<Utilisateur>>;
+    :Retour au Formulaire><<Utilisateur>>;
+    backward :Saisir Nom d'Utilisateur, Mot de Passe><<Utilisateur>>;
+  endif
+else (non)
+  :Afficher Formulaire d'Inscription><<Utilisateur>>;
+  :Saisir Nom d'Utilisateur, Email, Mot de Passe><<Utilisateur>>;
+  :Valider Formulaire><<Utilisateur>>;
+  if (Formulaire Valide?) then (oui)
+    :Envoyer au Serveur><<Système>>;
+    if (Compte Créé?) then (oui)
+      :Afficher Message de Succès><<Système>>;
+      :Afficher Formulaire de Connexion><<Utilisateur>>;
+    else (non)
+      :Afficher Erreur><<Système>>;
+      :Retour au Formulaire><<Utilisateur>>;
+      backward :Saisir Nom d'Utilisateur, Email, Mot de Passe><<Utilisateur>>;
+    endif
+  else (non)
+    :Afficher Message d'Erreur><<Utilisateur>>;
+    :Retour au Formulaire><<Utilisateur>>;
+    backward :Saisir Nom d'Utilisateur, Email, Mot de Passe><<Utilisateur>>;
+  endif
+endif
+
+:Écran du Menu Principal><<Utilisateur>>;
+
+split
+  :Démarrer Jeu><<Utilisateur>>;
+  :Session de Jeu><<Utilisateur>>;
+  :Fin de Partie><<Utilisateur>>;
+  :Soumettre Score><<Système>>;
+  :Retour au Menu Principal><<Utilisateur>>;
+split again
+  :Boutique><<Utilisateur>>;
+  :Interface Boutique><<Utilisateur>>;
+  :Parcourir Articles><<Utilisateur>>;
+  :Sélectionner Article><<Utilisateur>>;
+  if (Monnaie Suffisante?) then (oui)
+    :Acheter Article><<Système>>;
+    :Mettre à Jour Inventaire><<Système>>;
+  else (non)
+    :Afficher Erreur><<Système>>;
+  endif
+  :Retour à la Boutique><<Utilisateur>>;
+  :Retour au Menu Principal><<Utilisateur>>;
+split again
+  :Classement><<Utilisateur>>;
+  :Afficher Classement><<Système>>;
+  :Afficher Rangs des Joueurs><<Système>>;
+  :Afficher Rang Utilisateur Actuel><<Système>>;
+  :Retour au Menu Principal><<Utilisateur>>;
+split again
+  :Quitter><<Utilisateur>>;
+  :Déconnexion><<Système>>;
+  stop
+end split
+
+:Écran du Menu Principal><<Utilisateur>>;
+backward :Choix Utilisateur><<Utilisateur>>;
+
+@enduml 

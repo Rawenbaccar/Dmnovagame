@@ -17,5 +17,9 @@ public class CharacterDataShop : ScriptableObject
     public int priceValue;
     public Sprite[] statIcons;
 
-    public bool isUnlocked = true; 
+    public bool isUnlocked
+    {
+        get => PlayerPrefs.GetInt($"CharacterUnlocked_{characterID}", 0) == 1;
+        set => PlayerPrefs.SetInt($"CharacterUnlocked_{characterID}", value ? 1 : 0);
+    }
 }

@@ -1,0 +1,48 @@
+@startuml BoundlessNightGame
+
+skinparam {
+    DefaultFontSize 30
+    DefaultFontName Arial
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+    
+    UseCaseBackgroundColor White
+    UseCaseBorderColor Black
+    UseCaseFontSize 28
+    
+    ActorBackgroundColor White
+    ActorBorderColor Black
+    ActorFontSize 28
+    
+    RectangleFontSize 32
+    RectangleFontStyle bold
+    
+    ArrowThickness 2
+}
+
+' Définir la taille du diagramme
+scale 1.5
+
+left to right direction
+actor "Joueur" as player << Actor >>
+
+rectangle "Boundless Night Game" {
+    usecase "Commencer le\njeu" as startGame
+    usecase "S'authentifier" as auth
+    usecase "Afficher le shop" as shop
+    usecase "Afficher\nleaderboard" as leaderboard
+    usecase "Deconnecter" as disconnect
+}
+
+player --> startGame
+player --> shop
+player --> leaderboard
+player --> disconnect
+
+startGame ..> auth : <<include>>
+shop ..> auth : <<include>>
+leaderboard ..> auth : <<include>>
+disconnect ..> auth : <<include>>
+
+@enduml 

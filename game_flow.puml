@@ -1,0 +1,50 @@
+@startuml
+!theme plain
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+skinparam ArrowColor black
+
+start
+
+:Afficher l'écran de démarrage;
+
+if (Avez-vous un compte ?) then (oui)
+  :Se connecter;
+  if (Connexion OK ?) then (oui)
+    :Vérifier l'e-mail;
+  else (non)
+    :Erreur de connexion;
+    :-> "Afficher l'écran de démarrage";
+  endif
+else (non)
+  :-> "Afficher l'écran de démarrage";
+endif
+
+:Afficher le menu principal;
+
+rectangle "Sélection de menu ?" {
+  if (Jouer / Classement / Boutique ?) then (Jouer)
+    :Démarrer le jeu;
+    :Jouer;
+    :Fin du jeu;
+    :Soumettre le score;
+    :Afficher l'écran de fin de jeu;
+    :-> "Choix du joueur ?";
+  else
+    if (Classement sélectionné ?) then (oui)
+      :Afficher le classement;
+      :-> "Choix du joueur ?";
+    else
+      :Sélectionner un personnage;
+      :-> "Choix du joueur ?";
+    endif
+  endif
+}
+
+if (Recommencer ?) then (oui)
+  -> Afficher le menu principal
+else (non)
+  stop
+endif
+
+@enduml 

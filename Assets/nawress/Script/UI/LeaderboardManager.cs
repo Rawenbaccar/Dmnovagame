@@ -44,48 +44,48 @@ public class LeaderboardManager : MonoBehaviour
         // Check and log status of each required component
         if (leaderboardContent == null)
         {
-            Debug.LogError("LeaderboardContent is not assigned!");
+            //Debug.LogError("LeaderboardContent is not assigned!");
             // Updated path to match your exact hierarchy
             leaderboardContent = transform.Find("Canvas/Background/Leaderboard/Scroll View/Viewport/Content");
-            if (leaderboardContent == null)
-                Debug.LogError("Could not find Content transform automatically! Please create a Content object under Viewport!");
+            //if (leaderboardContent == null)
+                //Debug.LogError("Could not find Content transform automatically! Please create a Content object under Viewport!");
         }
 
         if (rankEntryPrefab == null)
         {
-            Debug.LogError("RankEntryPrefab is not assigned! Please assign the RankEntryPrefab from your Prefab folder!");
+            //Debug.LogError("RankEntryPrefab is not assigned! Please assign the RankEntryPrefab from your Prefab folder!");
         }
 
         if (currentUserPanel == null)
         {
-            Debug.LogError("CurrentUserPanel is not assigned!");
+            //Debug.LogError("CurrentUserPanel is not assigned!");
             currentUserPanel = transform.Find("Canvas/Background/Leaderboard/Scroll View/CurrentUserPanel")?.gameObject;
-            if (currentUserPanel == null)
-                Debug.LogError("Could not find CurrentUserPanel automatically!");
+            //if (currentUserPanel == null)
+                ////Debug.LogError("Could not find CurrentUserPanel automatically!");
         }
 
         if (currentUserRank == null && currentUserPanel != null)
         {
-            Debug.LogError("CurrentUserRank Text is not assigned!");
+            //Debug.LogError("CurrentUserRank Text is not assigned!");
             currentUserRank = currentUserPanel.transform.Find("RankText")?.GetComponent<TextMeshProUGUI>();
-            if (currentUserRank == null)
-                Debug.LogError("Could not find RankText in CurrentUserPanel!");
+            //if (currentUserRank == null)
+                //Debug.LogError("Could not find RankText in CurrentUserPanel!");
         }
 
         if (currentUserName == null && currentUserPanel != null)
         {
-            Debug.LogError("CurrentUserName Text is not assigned!");
+            //Debug.LogError("CurrentUserName Text is not assigned!");
             currentUserName = currentUserPanel.transform.Find("UsernameText")?.GetComponent<TextMeshProUGUI>();
-            if (currentUserName == null)
-                Debug.LogError("Could not find UsernameText in CurrentUserPanel!");
+            //if (currentUserName == null)
+                //Debug.LogError("Could not find UsernameText in CurrentUserPanel!");
         }
 
         if (currentUserTime == null && currentUserPanel != null)
         {
-            Debug.LogError("CurrentUserTime Text is not assigned!");
+            //Debug.LogError("CurrentUserTime Text is not assigned!");
             currentUserTime = currentUserPanel.transform.Find("TimeText")?.GetComponent<TextMeshProUGUI>();
-            if (currentUserTime == null)
-                Debug.LogError("Could not find TimeText in CurrentUserPanel!");
+            //if (currentUserTime == null)
+                //Debug.LogError("Could not find TimeText in CurrentUserPanel!");
         }
     }
 
@@ -98,7 +98,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         if (!ValidateBeforeFetch())
         {
-            Debug.LogError("Cannot fetch leaderboard - missing required components!");
+            //Debug.LogError("Cannot fetch leaderboard - missing required components!");
             yield break;
         }
 
@@ -111,7 +111,7 @@ public class LeaderboardManager : MonoBehaviour
             // Check if AuthManager exists
             if (AuthManager.Instance == null)
             {
-                Debug.LogError("AuthManager instance is null!");
+                //Debug.LogError("AuthManager instance is null!");
                 yield break;
             }
 
@@ -124,7 +124,7 @@ public class LeaderboardManager : MonoBehaviour
                 try
                 {
                     string jsonResponse = request.downloadHandler.text;
-                    Debug.Log($"Received JSON: {jsonResponse}"); // Debug log
+                    //Debug.Log($"Received JSON: {jsonResponse}"); // Debug log
                     LeaderboardResponse response = JsonUtility.FromJson<LeaderboardResponse>(jsonResponse);
                     UpdateLeaderboardUI(response);
                     break;
@@ -255,18 +255,18 @@ public class LeaderboardManager : MonoBehaviour
             return false;
         }
 
-        Debug.Log($"Updating rank entry for player: {rank.username} (Rank #{rank.rank})");
+        //Debug.Log($"Updating rank entry for player: {rank.username} (Rank #{rank.rank})");
 
         var rankText = entry.transform.Find("RankText")?.GetComponent<TextMeshProUGUI>();
         var usernameText = entry.transform.Find("UsernameText")?.GetComponent<TextMeshProUGUI>();
         var timeText = entry.transform.Find("TimeText")?.GetComponent<TextMeshProUGUI>();
 
         if (rankText == null)
-            Debug.LogError("RankText component not found in prefab!");
+            //Debug.LogError("RankText component not found in prefab!");
         if (usernameText == null)
-            Debug.LogError("UsernameText component not found in prefab!");
+            //Debug.LogError("UsernameText component not found in prefab!");
         if (timeText == null)
-            Debug.LogError("TimeText component not found in prefab!");
+            //Debug.LogError("TimeText component not found in prefab!");
 
         if (rankText == null || usernameText == null || timeText == null)
         {

@@ -4,12 +4,18 @@ using System.Collections; // Nécessaire pour utiliser les coroutines
 
 public class WolfHealthController : MonoBehaviour
 {
+    [SerializeField] private MonsterEnemy monsterEnemy;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private float knockbackDistance = 1f; // Distance du recul
     [SerializeField] private float knockbackDuration = 0.2f; // Durée du recul
 
     private bool isKnockedBack = false; // Empêche les interruptions de recul
 
+    public void Update()
+    {
+        Debug.Log(monsterEnemy.currentHealth / monsterEnemy.maxHealth);
+        healthSlider.value = monsterEnemy.currentHealth / monsterEnemy.maxHealth;
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         // Appliquer le recul

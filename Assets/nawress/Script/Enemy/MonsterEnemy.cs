@@ -27,7 +27,7 @@ public class MonsterEnemy : MonoBehaviour
         if (EnemyHealthManager.Instance != null)
         {
             maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
-            Debug.Log("el healthito managerito yemchito" + maxHealth.ToString());
+            //Debug.Log("el healthito managerito yemchito" + maxHealth.ToString());
         }
         else
         {

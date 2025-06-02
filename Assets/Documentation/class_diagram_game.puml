@@ -1,0 +1,125 @@
+@startuml DiagrammeDeClasses
+
+' Configuration simplifiée
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+skinparam classFontSize 16
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam arrowFontSize 16
+skinparam noteFontSize 14
+skinparam noteBackgroundColor WhiteSmoke
+skinparam noteBorderColor Black
+skinparam nodesep 80
+skinparam ranksep 40
+
+' Classes
+class EnemySpawner {
+  - float spawnInterval
+  - float spawnTimer
+  - int enemiesPerWave
+  - int currentWave
+  - GameObject[] enemyPrefabs
+  - Transform player
+  - float minDistanceFromPlayer
+  - float maxDistanceFromPlayer
+  + void SpawnWave()
+  + void CalculateSpawnPosition()
+  + void IncreaseSpawnRate()
+  + void SpawnEnemy(Vector2 position, GameObject enemyPrefab)
+}
+
+note right of EnemySpawner
+  Système de spawn d'ennemis:
+  Gère la création des ennemis
+  en fonction position du joueur
+end note
+
+class PlayerMovement {
+  - Vector2 movement
+  - float moveSpeed
+  - Vector2 lastMoveDirection
+  + void SetSpeed(float newSpeed)
+  + Vector2 GetMovementVector()
+  + float GetLastHorizontalVector()
+  + void FreezeMovement(float duration)
+}
+
+note left of PlayerMovement
+  Gestion de mouvement intégrée:
+  Chaque classe gère son propre état
+  et communique directement avec
+  les composants associés
+end note
+
+class PlayerStats {
+  - float basePlayerSpeed
+  - float baseAttackSpeed
+  - float maxHealth
+  - float currentHealth
+  - Slider healthSlider
+  + void RegenerateHealth()
+  + void IncreasePlayerSpeed()
+  + void IncreaseAttackSpeed()
+}
+
+class PlayerAnimator {
+  - Animator anim
+  - PlayerMovement pm
+  - SpriteRenderer sr
+  - bool isAnimationFrozen
+  - Color originalColor
+  + void SetAnimate(GameObject animObject)
+  + void Die()
+  + void FreezeAnimation(float duration)
+  + void SpriteDirectionChecker()
+}
+
+class PlayerHealthManager {
+  - float maxHealth
+  - float currentHealth
+  - float damageAmount
+  - GameOverScreen gameOverScreen
+  - SurvivalTimer survivalTimer
+  - bool isDead
+  - Slider healthSlider
+  + void TakeDamage(float damage)
+  + void UpdateHealthUI()
+  + void CheckGameOver()
+}
+
+class WhipWeapon {
+  - float timeToAttack
+  - float timer
+  - GameObject leftWhipObject
+  - GameObject rightWhipObject
+  - PlayerMovement playerMove
+  + void SetAttackSpeed(float newAttackSpeed)
+  + void ManageAttack()
+  + void Attack()
+}
+
+' Layout contrôlé
+EnemySpawner -[hidden]d-> PlayerMovement
+PlayerMovement -[hidden]d-> PlayerStats
+PlayerMovement -[hidden]r-> PlayerAnimator
+PlayerStats -[hidden]r-> WhipWeapon
+PlayerStats -[hidden]d-> PlayerHealthManager
+
+' Relations
+EnemySpawner "1" --> "0..*" PlayerMovement : "cible"
+EnemySpawner ..> PlayerHealthManager : "inflige dégâts"
+
+PlayerMovement "1" <-- "1" PlayerAnimator : "met à jour"
+PlayerMovement "1" --> "1" PlayerStats : "contient"
+PlayerMovement "1" <-- "1" WhipWeapon : "vérifie direction"
+
+PlayerStats "1" <-- "1" WhipWeapon : "modifie vitesse d'attaque"
+PlayerStats "1" --> "1" PlayerHealthManager : "gère"
+
+PlayerAnimator "1" --> "1" WhipWeapon : "gère"
+
+@enduml 
