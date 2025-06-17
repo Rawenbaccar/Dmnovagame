@@ -1,0 +1,43 @@
+@startuml Nova Game System
+
+skinparam usecase {
+  BorderColor Black
+  ArrowColor Black
+}
+
+left to right direction
+actor "Player" as player
+
+rectangle "Nova Game System" {
+    usecase "Start Game" as startGame
+    usecase "Save Game State" as saveGame
+    usecase "Load Game State" as loadGame
+    usecase "Move Character" as moveChar
+    usecase "Interact with Objects" as interact
+    usecase "Access Inventory" as inventory
+    usecase "View Stats" as stats
+    usecase "Update Score" as updateScore
+    usecase "Manage Level Progress" as levelProgress
+    usecase "Handle Achievements" as achievements
+}
+
+' Player connections
+player --> startGame
+player --> moveChar
+player --> interact
+player --> inventory
+player --> stats
+
+' Game state relationships
+moveChar ..> updateScore : <<include>>
+interact ..> updateScore : <<include>>
+startGame ..> levelProgress : <<include>>
+interact ..> achievements : <<extend>>
+inventory ..> saveGame : <<include>>
+stats ..> levelProgress : <<include>>
+startGame ..> loadGame : <<include>>
+updateScore ..> saveGame : <<include>>
+achievements ..> saveGame : <<include>>
+levelProgress ..> saveGame : <<include>>
+
+@enduml 

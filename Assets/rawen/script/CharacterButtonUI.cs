@@ -32,7 +32,7 @@ public class CharacterButtonUI : MonoBehaviour
     {
         Debug.Log("hello from debugger");
         CharacterSelectionManager.Instance.SelectCharacter(characterData, this);
-        if (!characterData.isUnlocked)
+        if (characterData.isUnlocked == false)
         {
             CharacterAPI itemAPI = FindObjectOfType<CharacterAPI>();
             itemAPI.AddItem(characterData.characterName);

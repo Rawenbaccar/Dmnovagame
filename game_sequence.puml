@@ -1,0 +1,42 @@
+@startuml
+actor joueur
+
+participant "Menu Principal" as menu
+participant "Système de Jeu" as game
+participant "Gestionnaire d'Ennemis" as enemies
+participant "Gestionnaire de Score" as score
+
+joueur -> game: Démarrer une partie
+joueur -> game: Choisir caractère
+joueur -> game: Confirmer sélection
+
+loop "Boucle de jeu principale"
+    joueur -> game: Déplacer joueur
+    
+    alt "Spawn d'ennemi(s)"
+        game -> enemies: Spawn ennemis
+        enemies --> game: Ennemis créés
+    end
+
+    alt "Combat"
+        joueur -> enemies: Attaquer ennemis
+        enemies -> game: Appliquer dégâts
+    end
+
+    alt "Ennemi mort"
+        enemies -> score: Collecter diamonds
+        score -> score: Mettre à jour score
+    end
+
+    alt "Joueur touché"
+        enemies -> game: Infliger dégâts
+        game -> joueur: Perdre points de vie
+        
+        alt "Joueur mort"
+            game -> menu: Retour au menu
+            game -> score: Enregistrer score final
+        end
+    end
+end
+
+@enduml 

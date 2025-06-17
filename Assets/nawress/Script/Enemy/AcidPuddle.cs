@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AcidPuddle : MonoBehaviour
 {
-    public float damagePerSecond = 5f;  // Damage applied per second
+    public float damagePerSecond = 4f;  // Damage applied per second
     private bool playerInside = false;  // To track if the player is inside the puddle
     private PlayerHealthManager playerHealth;  // Reference to the player's health manager
 
@@ -29,10 +29,10 @@ public class AcidPuddle : MonoBehaviour
     }
 
 
-
+ // call when player leave acide 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))  // When player leaves the acid puddle
+        if (other.CompareTag("Player"))  
         {
             playerInside = false;  // Stop damaging the player
         }

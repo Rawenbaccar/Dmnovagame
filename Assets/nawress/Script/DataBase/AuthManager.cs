@@ -3,8 +3,8 @@ using UnityEngine.Networking;
 using System;
 using System.Collections;
 
-// Response classes for authentication
-[Serializable]
+
+[Serializable] // Convertir un objet en une série de bytes
 public class AuthResponses
 {
     [Serializable]
@@ -31,7 +31,7 @@ public class AuthResponses
         public string GetFormattedError()
         {
             System.Text.StringBuilder errorMsg = new System.Text.StringBuilder();
-            
+            //format des phrases exp username:nawres
             if (username != null && username.Length > 0)
             {
                 errorMsg.AppendLine("• Username: " + string.Join(", ", username));
@@ -44,7 +44,7 @@ public class AuthResponses
             {
                 errorMsg.AppendLine("• Email: " + string.Join(", ", email));
             }
-
+        //convertir en string and organisehom
             return errorMsg.ToString().TrimEnd();
         }
     }
@@ -61,6 +61,7 @@ public class AuthManager : MonoBehaviour
     private static AuthManager instance;
     public static AuthManager Instance
     {
+        // verifier si instance est null et si oui creer une nouvelle instance
         get
         {
             if (instance == null)
@@ -74,16 +75,16 @@ public class AuthManager : MonoBehaviour
     }
 
     [Header("API Settings")]
-    private string baseUrl = "http://localhost:8000";  // Make sure this matches your API URL
+    private string baseUrl = "http://51.255.29.221:8866";  // Make sure this matches your API URL
 
     private string accessToken;
     private string refreshToken;
     private bool isRefreshing = false;
-
+//=true si token est valide et non vide
     public bool IsAuthenticated => !string.IsNullOrEmpty(accessToken);
 
     private void Awake()
-    {
+    { //pour que sigloton avoir un1 seul instance 
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -99,6 +100,7 @@ public class AuthManager : MonoBehaviour
     private void LoadTokens()
     {
         Debug.Log("Loading tokens from PlayerPrefs...");
+        //recuperer token dans playerprefs
         accessToken = PlayerPrefs.GetString("AccessToken", "");
         refreshToken = PlayerPrefs.GetString("RefreshToken", "");
         
@@ -175,7 +177,7 @@ public class AuthManager : MonoBehaviour
     }
 
     public void ClearTokens()
-    {
+    { //for logout clearing token
         Debug.Log("Clearing all tokens...");
         accessToken = null;
         refreshToken = null;
@@ -185,7 +187,7 @@ public class AuthManager : MonoBehaviour
         Debug.Log("Tokens cleared successfully");
     }
 
-    // Add this method to verify token storage
+    // for testing and debug
     public bool VerifyTokenStorage()
     {
         string storedAccess = PlayerPrefs.GetString("AccessToken", "");
@@ -208,7 +210,7 @@ public class AuthManager : MonoBehaviour
         VerifyTokenStorage();
         StartCoroutine(RefreshTokenCoroutine(onComplete));
     }
-
+//verfiy si access exist dans request header et si oui ajouter bearer et token
     public string GetAuthorizationHeader()
     {
         string token = GetAccessToken();
@@ -224,8 +226,8 @@ public class AuthManager : MonoBehaviour
     {
         if (isRefreshing)
         {
-            yield return new WaitUntil(() => !isRefreshing);
-            onComplete?.Invoke(IsAuthenticated);
+            yield return new WaitUntil(() => !isRefreshing);// not pass until is refreshing is false
+            onComplete?.Invoke(IsAuthenticated);//if token is valid and not empty
             yield break;
         }
 
@@ -249,7 +251,7 @@ public class AuthManager : MonoBehaviour
         string jsonData = JsonUtility.ToJson(requestBody);
 
         using (UnityWebRequest www = new UnityWebRequest(baseUrl + "/auth/token/refresh/", "POST"))
-        {
+        { //convert to byte and put it in body raw 
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();

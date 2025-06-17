@@ -1,0 +1,94 @@
+@startuml DiagrammeSequence
+
+' Configuration du style améliorée pour une meilleure lisibilité
+skinparam dpi 300
+skinparam backgroundColor white
+skinparam sequenceArrowThickness 4
+skinparam sequenceMessageAlign center
+
+' Augmentation des tailles de police
+skinparam defaultFontSize 24
+skinparam sequenceParticipantFontSize 26
+skinparam sequenceActorFontSize 26
+skinparam sequenceArrowFontSize 24
+skinparam sequenceGroupFontSize 26
+skinparam sequenceDividerFontSize 28
+skinparam noteFontSize 22
+skinparam sequenceTitleFontSize 30
+
+' Styles plus clairs et plus visibles
+skinparam shadowing true
+skinparam roundcorner 14
+
+skinparam noteBackgroundColor LightYellow
+skinparam noteBorderColor Gold
+
+' Styles des participants
+skinparam participant {
+    BackgroundColor LightBlue
+    BorderColor Blue
+    FontStyle bold
+}
+
+skinparam actor {
+    BackgroundColor LightGreen
+    BorderColor Green
+    FontStyle bold
+}
+
+' Participants
+actor "**Joueur**" as Joueur
+participant "**ContrôleurNiveauExpérience**" as ELC
+participant "**GestionnaireAudio**" as AM
+participant "**ChangementSol**" as GC
+participant "**GestionnaireTerrainInfini**" as IGM
+
+
+' === Initialisation du Jeu ===
+group <b>Initialisation du Jeu</b>
+    Joueur -> ELC: <b>Démarrer Jeu</b>
+    ELC -> AM: ConfigurationAudio()
+    AM --> ELC: Système Audio Prêt
+    ELC -> ELC: DéfinirNiveauInitial()
+    ELC -> IGM: Initialiser Terrain Généré
+    IGM --> ELC: Terrain Prêt
+    ELC --> Joueur: <b>Jeu Prêt</b>
+end
+
+' === Génération Continue du Terrain ===
+group <b>Génération Continue du Terrain</b>
+    Joueur -> IGM: <b>Déplacer</b>
+    IGM -> IGM: ObtenirCoordonnéesTuileJoueur()
+    IGM -> IGM: SpawnerTuileÀ(coord)
+    IGM --> ELC: Terrain Mis à Jour
+end
+
+' === Séquence de Montée de Niveau ===
+group <b>Séquence de Montée de Niveau</b>
+    Joueur -> ELC: <b>Gagner Expérience</b>
+    ELC -> ELC: VérifierNiveau()
+    
+    alt <b>Niveau Atteint Multiple de 3</b>
+        ELC -> ELC: ChangerMusiquePourNiveau(niveauActuel)
+        ELC -> AM: Changer Musique de Fond
+        AM --> ELC: Musique Changée
+    end
+    
+    ELC -> GC: Mettre à Jour Apparence du Sol
+    GC --> ELC: Sol Mis à Jour
+    
+    ELC -> ELC: JouerSonChangementNiveau()
+    ELC -> AM: JouerSonChangementNiveau()
+    AM --> ELC: Son Joué
+    ELC --> Joueur: <b>Montée de Niveau Terminée</b>
+end
+
+' === Effets Sonores ===
+group <b>Effets Sonores</b>
+    Joueur -> AM: <b>Cliquer sur Bouton</b>
+    AM -> AM: JouerSonClicBouton()
+    AM --> Joueur: <b>Son Joué</b>
+end
+
+
+@enduml 

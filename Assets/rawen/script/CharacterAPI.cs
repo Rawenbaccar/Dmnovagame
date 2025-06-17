@@ -4,8 +4,7 @@ using System.Collections;
 
 public class CharacterAPI : MonoBehaviour
 {
-    private string url = "http://localhost:8000/api/v1/items/add/";
-    private string accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NTExNjU4LCJpYXQiOjE3NDc1MDgwNTgsImp0aSI6ImEzZTBiZmEwMDUyYjRjY2I4OTY4Mjk5YTAzMjYyZDgxIiwidXNlcl9pZCI6MywidXNlciI6eyJpZCI6MywiZW1haWwiOiJib3RpQGdtYWlsLmNvbSIsImlzX3N0YWZmIjpmYWxzZX19.q3fjvtGMGATzk7Z8TKGefHJiftAp_l4EWofO3JMbLGI";
+    private string url = "http://51.255.29.221:8866/api/v1/items/add/";
 
     // Method to send the request with the item's name
     public void AddItem(string itemName)
@@ -15,6 +14,14 @@ public class CharacterAPI : MonoBehaviour
 
     private IEnumerator SendAddItemRequest(string itemName)
     {
+        string accessToken = AuthManager.Instance.GetAccessToken();
+
+        // Check if token is valid
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            Debug.LogWarning("Access token is not available. Cannot send request.");
+            yield break;
+        }
         // Create the JSON body
         string jsonBody = "{\"name\":\"" + itemName + "\"}";
 

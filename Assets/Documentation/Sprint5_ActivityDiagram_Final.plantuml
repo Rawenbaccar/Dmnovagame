@@ -1,0 +1,66 @@
+@startuml Sprint5_ActivityDiagram_Final
+
+title Sprint 5: Connexion, Inscription, Boutique et Classement
+
+' Couleurs sobres pour les partitions
+skinparam partition {
+  BackgroundColor<<Utilisateur>> #FDF6E3
+  BackgroundColor<<Système>> #DCECF2
+}
+
+' Point de départ
+start
+
+partition "Authentification" {
+  partition "Utilisateur"<<Utilisateur>> {
+    :Écran d'Accueil;
+    
+    if (Possède un Compte?) then (oui)
+      :Connexion;
+    else (non)
+      :Inscription;
+    endif
+  }
+  
+  partition "Système"<<Système>> {
+    if (Authentification Réussie?) then (oui)
+      :Stocker Jeton d'Auth;
+    else (non)
+      :Afficher Erreur;
+      note right: Retour à l'authentification
+    endif
+  }
+}
+
+partition "Menu Principal"<<Utilisateur>> {
+  :Menu Principal; #menu
+}
+
+split
+  :Jouer;
+  :Session de Jeu;
+  :Soumettre Score><<Système>>;
+  --> menu
+split again
+  :Boutique;
+  :Sélectionner Article;
+  if (Monnaie Suffisante?) then (oui)
+    :Acheter Article><<Système>>;
+    :Mettre à Jour Inventaire><<Système>>;
+  else (non)
+    :Afficher Erreur><<Système>>;
+  endif
+  --> menu
+split again
+  :Classement;
+  :Afficher Rangs><<Système>>;
+  :Afficher Rang Utilisateur><<Système>>;
+  --> menu
+split again
+  :Quitter;
+  :Déconnexion><<Système>>;
+  :Écran d'Accueil;
+  stop
+end split
+
+@enduml 

@@ -42,22 +42,21 @@ public class AudioManager : MonoBehaviour
             if (musicSource == null) musicSource = gameObject.AddComponent<AudioSource>();
             if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
 
-            // Music setup
             musicSource.loop = true;
             musicSource.volume = musicVolume;
 
-            // Play first track
-            if (levelMusicTracks.Length > 0)
-            {
-                musicSource.clip = levelMusicTracks[0];
-                musicSource.Play();
-            }
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
         }
+
+        // Handle music on initial scene load
+        HandleSceneMusic(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.ToLower());
     }
+
+
 
     // ============= PUBLIC FUNCTIONS TO PLAY SOUND EFFECTS =============
 
@@ -67,6 +66,32 @@ public class AudioManager : MonoBehaviour
         {
             instance.sfxSource.PlayOneShot(instance.buttonClickSound, instance.buttonClickVolume);
         }
+    }
+
+    private void HandleSceneMusic(string sceneName)
+    {
+        AudioClip desiredClip = null;
+
+        if (sceneName.Contains("GameScene".ToLower()) && levelMusicTracks.Length > 1)
+        {
+            desiredClip = levelMusicTracks[0]; // Game music
+        }
+        else if (levelMusicTracks.Length > 0)
+        {
+            desiredClip = levelMusicTracks[3]; // Menu/Shop music
+        }
+
+        // Only change music if it's different
+        if (musicSource.clip != desiredClip && desiredClip != null)
+        {
+            musicSource.clip = desiredClip;
+            musicSource.Play();
+        }
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        HandleSceneMusic(scene.name.ToLower());
     }
 
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class InfiniteGroundManager : MonoBehaviour
 {
+    public ExperienceLevelController ELC;
+    public Sprite[] BGs;
     public GameObject groundPrefab;  // Prefab du sol
     public Transform player;         // Référence au joueur
     public int gridSize = 3;         // Taille de la grille (3x3)
@@ -33,6 +35,20 @@ public class InfiniteGroundManager : MonoBehaviour
 
     void Update()
     {
+        int spriteIndex = ELC.currentLevel / 3;
+
+        if (ELC.currentLevel < 10 && spriteIndex < BGs.Length)
+        {
+            foreach (var tile in spawnedTiles.Values)
+            {
+                SpriteRenderer sr = tile.GetComponent<SpriteRenderer>();
+                if (sr != null && sr.sprite != BGs[spriteIndex])
+                {
+                    sr.sprite = BGs[spriteIndex];
+                }
+            }
+        }
+
         Vector2Int newPlayerTile = GetTileCoords(player.position);
         if (newPlayerTile != currentPlayerTile)
         {
@@ -40,6 +56,7 @@ public class InfiniteGroundManager : MonoBehaviour
             UpdateGrid();
         }
     }
+
 
     Vector2Int GetTileCoords(Vector3 position)
     {

@@ -1,0 +1,39 @@
+@startuml BoundlessNightActivity
+
+skinparam {
+    DefaultFontSize 24
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+    ActivityBackgroundColor White
+    ActivityBorderColor Black
+    ActivityDiamondBackgroundColor White
+    ActivityDiamondBorderColor Black
+}
+
+(*) --> "Menu"
+
+"Menu" --> "Consulter le score"
+"Menu" --> "Consulter Shop"
+"Menu" --> "Démarrer\nune partie"
+"Menu" --> "Déconnecter"
+
+"Démarrer\nune partie" --> "Choisir Caractère"
+"Choisir Caractère" --> "Jouer"
+"Jouer" --> "Spawn Ennemis"
+"Spawn Ennemis" --> "Déplacer Joueur"
+
+"Déplacer Joueur" --> "Attaquer Ennemis"
+"Attaquer Ennemis" --> "Ennemi Morts ?" as EnnemisCheck
+
+EnnemisCheck -right-> "Perdre des\npoints de vies" : Non
+EnnemisCheck -down-> "Collecter\nDiamonds" : Oui
+
+"Collecter\nDiamonds" --> "Déplacer Joueur"
+
+"Perdre des\npoints de vies" --> "Joueur Morts ?" as JoueurCheck
+
+JoueurCheck -up-> "Menu" : Yes
+JoueurCheck -left-> "Déplacer Joueur" : Non
+
+@enduml 

@@ -34,7 +34,7 @@ public class ExperienceLevelController : MonoBehaviour
     [SerializeField] private GameObject powerUpPanel; // Référence au panel de power-up
 
     [Header("Slider Animation")]
-    [SerializeField] private float sliderSpeed = 2f; // Vitesse de l'animation du slider
+    //[SerializeField] private float sliderSpeed = 2f; // Vitesse de l'animation du slider
     public float targetSliderValue = 0f;
     public float currentSliderValue = 0f;
 
@@ -72,12 +72,9 @@ public class ExperienceLevelController : MonoBehaviour
         // Animation fluide du slider
         if (currentSliderValue != targetSliderValue)
         {
-            //Debug.Log("wuuut ?");
-            //currentSliderValue = Mathf.Lerp(currentSliderValue, targetSliderValue, Time.deltaTime * sliderSpeed);
-            //currentSliderValue += 0.2f;
             expSlider.value = (float)collectedDiamonds / diamondsPerLevel;
 
-            if (expSlider.value >= 0.999f)
+            if (expSlider.value >= 0.999f) //we use 0.999 because of some inaccuracies with slider componant 
             {
                 ShowPowerUpPanel();
                 currentSliderValue = 0f;
@@ -85,7 +82,6 @@ public class ExperienceLevelController : MonoBehaviour
                 targetSliderValue = 0f;
                 expSlider.value = 0f;
                 LevelUp();
-                //  Time.timeScale = 1f; // Reprend le jeu si vous l'aviez mis en pause
             }
         }
     }

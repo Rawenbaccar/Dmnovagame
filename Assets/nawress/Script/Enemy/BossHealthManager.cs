@@ -88,7 +88,7 @@ public class BossHealthManager : MonoBehaviour
 
     private void DropItems()
     {
-        float dropDistance = 1.5f; // Adjust the distance between items
+        float dropDistance = 3.5f; // Adjust the distance between items
 
         // Drop Magnet
         if (magnetPrefab != null)

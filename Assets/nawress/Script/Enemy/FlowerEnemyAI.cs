@@ -23,8 +23,8 @@ public class FlowerEnemyAI : MonoBehaviour
     private float spawnTime;
     private SpriteRenderer spriteRenderer;
     private static int activeFlowerCount;
-    private bool isKnockedBack = false;
-    private static bool hasSpawnedFlowers = false; // New static flag to track if we've spawned flowers
+    //private bool isKnockedBack = false;
+    //private static bool hasSpawnedFlowers = false; // New static flag to track if we've spawned flowers
     
     void Awake()
     {
@@ -207,7 +207,7 @@ public class FlowerEnemyAI : MonoBehaviour
 
     private IEnumerator Knockback(Transform attacker)
     {
-        isKnockedBack = true;
+        //isKnockedBack = true;
         Vector2 knockbackDirection = (transform.position - attacker.position).normalized;
         Vector2 startPosition = transform.position;
         Vector2 targetPosition = startPosition + knockbackDirection * knockbackDistance;
@@ -221,6 +221,6 @@ public class FlowerEnemyAI : MonoBehaviour
         }
 
         transform.position = targetPosition;
-        isKnockedBack = false;
+        //isKnockedBack = false;
     }
 }

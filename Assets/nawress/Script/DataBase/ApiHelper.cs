@@ -5,16 +5,17 @@ using UnityEngine.Networking;
 
 public class ApiHelper : MonoBehaviour
 {
+    // send request to api add to header authorization(token)
     public static IEnumerator SendRequest(UnityWebRequest request, Action<UnityWebRequest> onComplete)
     {
         bool shouldRetry;
         do
-        {
+        { 
             shouldRetry = false;
             
-            // Add authorization header
+            // Add authorization header (add token)
             request.SetRequestHeader("Authorization", AuthManager.Instance.GetAuthorizationHeader());
-            
+            //envoi a serveur
             yield return request.SendWebRequest();
 
             // Check if we need to refresh the token
@@ -26,13 +27,13 @@ public class ApiHelper : MonoBehaviour
                 if (refreshSuccess)
                 {
                     // Retry the original request
-                    request.Dispose();
+                    request.Dispose();// envoi data with new autheraziation (token )
                     request = new UnityWebRequest(request.url, request.method);
                     shouldRetry = true;
                     continue;
                 }
             }
-
+//prend la reposnse succes or error
             onComplete?.Invoke(request);
             
         } while (shouldRetry);
@@ -40,7 +41,7 @@ public class ApiHelper : MonoBehaviour
 
     // Helper method for GET requests
     public static IEnumerator Get(string url, Action<UnityWebRequest> onComplete)
-    {
+    { //  envoi request get et return data
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             yield return SendRequest(www, onComplete);
@@ -53,11 +54,11 @@ public class ApiHelper : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
             www.SetRequestHeader("Content-Type", "application/json");
-            yield return SendRequest(www, onComplete);
+            yield return SendRequest(www, onComplete);//pour autherazation et anvoi requet aux serveur
         }
     }
 
-    // Helper method for form-data POST requests
+    // envoi data type formulaire aussi fichier
     public static IEnumerator PostForm(string url, WWWForm formData, Action<UnityWebRequest> onComplete)
     {
         using (UnityWebRequest www = UnityWebRequest.Post(url, formData))

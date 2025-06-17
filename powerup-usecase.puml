@@ -1,0 +1,74 @@
+@startuml PowerUp System Use Cases
+
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+'Actor
+left to right direction
+actor Player as "Player"
+
+rectangle "Power-Up System" {
+  'Core Gameplay
+  usecase "Progress to Next Level" as NextLevel
+  usecase "Choose Power-up" as ChoosePowerUp
+  usecase "View Power-up Options" as ViewOptions
+  usecase "Collect Power-up" as Collect
+  usecase "Activate Power-up" as Activate
+
+  'Power-ups
+  usecase "Throw Knife" as Knife
+  usecase "Boost Attack Speed" as AttackSpeed
+  usecase "Cast Fireball" as Fireball
+  usecase "Summon Thunder" as Thunder
+  usecase "Fire Laser" as Laser
+  usecase "Enhance Whip" as Whip
+  usecase "Boost Movement" as Speed
+  usecase "Attract Items" as Magnet
+  usecase "Freeze Enemies" as Freeze
+  usecase "Heal Player" as Health
+}
+
+'Main Flow
+Player --> NextLevel
+NextLevel ..> ViewOptions : includes
+ViewOptions ..> ChoosePowerUp : includes
+Player --> Collect
+Player --> Activate
+
+'Power-up Extensions
+Activate <.. Knife : extends
+Activate <.. AttackSpeed : extends
+Activate <.. Fireball : extends
+Activate <.. Thunder : extends
+Activate <.. Laser : extends
+Activate <.. Whip : extends
+Activate <.. Speed : extends
+Activate <.. Magnet : extends
+Activate <.. Freeze : extends
+Activate <.. Health : extends
+
+'Additional Information
+note right of ViewOptions
+  Player is presented with
+  3 random power-ups from
+  available pool of 10
+end note
+
+note right of Activate
+  Power-up Properties:
+  - Active Duration
+  - Cooldown Timer
+  - Visual Feedback
+  - Sound Effects
+end note
+
+note bottom of NextLevel
+  Triggers power-up
+  selection phase
+end note
+
+@enduml 

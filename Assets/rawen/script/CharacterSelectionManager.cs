@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class CharacterSelectionManager : MonoBehaviour
 {
@@ -13,14 +14,33 @@ public class CharacterSelectionManager : MonoBehaviour
     public Text PriceTextCh;
     public Image[] statImages;
     public Image bottomIcon;
-    public Button buyButton; // << AJOUTÉ
+    public Button buyButton;
 
-    [HideInInspector] public CharacterDataShop selectedCharacterData;
-    [HideInInspector] public CharacterButtonUI selectedButtonUI;
+    public CharacterDataShop selectedCharacterData;
+    public CharacterButtonUI selectedButtonUI;
+
+    [Header("External Scripts")]
+    public CharacterAPI characterAPI;
+
+    [Header("Character Buttons")]
+    public List<CharacterButtonUI> characterButtons; // Reference to all buttons
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        UpdateAllCharacterLockStates(); // 👈 Add this call
+    }
+
+    public void UpdateAllCharacterLockStates()
+    {
+        foreach (var button in characterButtons)
+        {
+            button.UpdateLockState();
+        }
     }
 
     public void SelectCharacter(CharacterDataShop data, CharacterButtonUI buttonUI = null)
@@ -69,7 +89,8 @@ public class CharacterSelectionManager : MonoBehaviour
             CoinData.instance.totalCoins -= selectedCharacterData.priceValue;
             CoinData.instance.SaveCoins();
             selectedCharacterData.isUnlocked = true;
-            selectedButtonUI.UpdateLockState(); // Met à jour le cadenas
+            PlayerPrefs.Save();
+            selectedButtonUI.UpdateLockState();
 
             Debug.Log("Character unlocked!");
         }

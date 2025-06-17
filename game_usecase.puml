@@ -1,0 +1,74 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+
+skinparam usecase {
+  FontSize 16
+  FontStyle bold
+  BackgroundColor white
+  BorderThickness 2
+}
+
+skinparam note {
+  FontSize 14
+  BackgroundColor white
+  BorderThickness 1
+}
+
+skinparam actor {
+  FontSize 16
+  FontStyle bold
+}
+
+skinparam rectangle {
+  FontSize 18
+  FontStyle bold
+  BorderThickness 2
+}
+
+skinparam arrow {
+  Thickness 2
+}
+
+actor joueur
+
+rectangle "Boundless Night Game" {
+    usecase "Jouer" as UC1
+    usecase "Suivre\nles niveaux" as UC2
+    usecase "Suivre\nMouvement" as UC3
+    usecase "Changer\nApparence sol" as UC4
+    usecase "Son niveau\nsupérieur" as UC5
+    usecase "Musique\nambiante" as UC6
+    usecase "Changer\nMusique" as UC7
+    usecase "Générer\nobstacles" as UC8
+    usecase "Générer\nle sol" as UC9
+    
+    note "Changer tous les 3 niveaux" as N1
+    note "Génération continue du terrain" as N2
+    
+    joueur -- UC1
+    UC1 ..> UC2 : <<include>>
+    UC1 ..> UC3 : <<include>>
+    
+    UC2 ..> UC4 : <<extend>>
+    UC2 ..> UC5 : <<extend>>
+    UC2 ..> UC6 : <<extend>>
+    UC2 ..> UC7 : <<extend>>
+    
+    UC5 ..> UC7 : <<include>>
+    UC6 ..> UC7 : <<include>>
+    
+    UC3 ..> UC8 : <<include>>
+    UC3 ..> UC9 : <<include>>
+    
+    N1 .. UC2
+    N2 .. UC1
+    N2 .. UC3
+}
+
+@enduml 

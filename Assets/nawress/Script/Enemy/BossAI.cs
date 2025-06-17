@@ -7,7 +7,7 @@ public class BossAI : MonoBehaviour
     public Animator bossAnimator; // Reference to the boss's Animator
     public Transform player; // The player's position
     public float moveSpeed = 1f; // Boss movement speed
-    public float teleportCooldown = 5f; // Time between each teleport
+    public float teleportCooldown = 10f; // Time between each teleport
     public GameObject clonePrefab; // The clone prefab
     private float teleportTimer; // Timer to track teleport cooldown
     public float animationCooldown = 5f; // Temps entre chaque animation
@@ -52,7 +52,7 @@ public class BossAI : MonoBehaviour
         if (player != null && player.GetComponent<Animator>() != null)
         {
             player.GetComponent<Animator>().SetTrigger("SpecialMove"); // Replace "SpecialMove" with your actual animation
-            Debug.Log("Played special animation");
+            
         }
     }
 
@@ -75,7 +75,7 @@ public class BossAI : MonoBehaviour
             teleportTimer = teleportCooldown; // Reset the teleport timer
         }
     }
-
+// clones apparition
     void Teleport()
     {
         // Create shadow clones before teleporting

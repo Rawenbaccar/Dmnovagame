@@ -26,8 +26,10 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
+        // au Début du jeu seul le premier ennemi est débloqué 
         Init();
         unlockedEnemies.Add(enemyTypes.enemyTypes[0].enemyPrefab);
+
 
         // Subscribe to level up event
         if (ExperienceLevelController.instance != null)
@@ -167,8 +169,9 @@ public class EnemySpawner : MonoBehaviour
         {
             if (!unlockedEnemies.Contains(enemyType.enemyPrefab)) // If not already unlocked
             {
+                // unclok le premier ennemi non debloque 
                 unlockedEnemies.Add(enemyType.enemyPrefab);
-                break; // Unlock only one new enemy at a time
+                break; // for only one enmy
             }
         }
     }

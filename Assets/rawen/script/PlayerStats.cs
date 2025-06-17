@@ -5,31 +5,17 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField] private float basePlayerSpeed = 5f;
     [SerializeField] private float baseAttackSpeed = 1f;
-
-    [SerializeField] private float maxHealth = 100f; // Santé maximale
-    private float currentHealth; // Santé actuelle
-
-    [SerializeField] private Slider healthSlider; // Référence au Slider de la santé
-
-    private void Start()
-    {
-        currentHealth = maxHealth; // La santé actuelle commence à la valeur maximale
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth; // Définit la valeur maximale du slider
-            healthSlider.value = currentHealth; // Initialise le slider avec la santé actuelle
-        }
-    }
+    [SerializeField] private PlayerHealthManager PHM ;
 
     // Méthode pour régénérer la santé au maximum et mettre à jour le slider
     public void RegenerateHealth()
     {
-        currentHealth = maxHealth; // Remet la santé à son maximum
+        PHM.currentHealth = PHM.maxHealth; // Remet la santé à son maximum
 
         // Met à jour le slider de santé pour qu'il affiche la santé complète
-        if (healthSlider != null)
+        if (PHM.Healthslider != null)
         {
-            healthSlider.value = currentHealth;
+            PHM.Healthslider.value = PHM.currentHealth;
         }
 
         Debug.Log("Santé régénérée au maximum!");
@@ -37,13 +23,13 @@ public class PlayerStats : MonoBehaviour
 
     public void IncreasePlayerSpeed()
     {
-        basePlayerSpeed *= 1.5f;
+        basePlayerSpeed *= 1.1f;
         FindObjectOfType<PlayerMovement>().SetSpeed(basePlayerSpeed);
     }
 
     public void IncreaseAttackSpeed()
     {
-        baseAttackSpeed /= 1.5f;
+        baseAttackSpeed /= 1.3f;
         FindObjectOfType<WhipWapean>().SetAttackSpeed(baseAttackSpeed);
     }
 }

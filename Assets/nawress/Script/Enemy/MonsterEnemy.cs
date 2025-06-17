@@ -20,14 +20,13 @@ public class MonsterEnemy : MonoBehaviour
     public float movementSpeed = 2f; // Monster movement speed
 
     void Start()
-    {
-        player = GameObject.FindWithTag("Player"); // Assuming your player has the "Player" tag
+    { // trouver le joueur par son tag 
+        player = GameObject.FindWithTag("Player"); 
 
         // Initialize health with scaling
         if (EnemyHealthManager.Instance != null)
         {
             maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
-            Debug.Log("el healthito managerito yemchito" + maxHealth.ToString());
         }
         else
         {
@@ -40,10 +39,10 @@ public class MonsterEnemy : MonoBehaviour
     {
         if (player == null) return;
 
-        // Check the distance between the monster and the player
+        // Calcule la distance player et enemy 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        // Move the monster towards the player (if not attacking)
+        // Move the monster near the player (if not attacking)
         if (distanceToPlayer > attackRange)
         {
             MoveTowardsPlayer();
@@ -52,6 +51,7 @@ public class MonsterEnemy : MonoBehaviour
                 animator.SetBool("isWalking", true); // Set walking animation
             }
         }
+        //Si le joueur est proche, il arrête l’animation de marche
         else
         {
             if (animator != null)
@@ -71,7 +71,7 @@ public class MonsterEnemy : MonoBehaviour
 
     void MoveTowardsPlayer()
     {
-        // Move the monster towards the player
+        // calculate the direction to move the monster towards the player
         Vector3 direction = (player.transform.position - transform.position).normalized;
         transform.Translate(direction * movementSpeed * Time.deltaTime, Space.World);
     }
