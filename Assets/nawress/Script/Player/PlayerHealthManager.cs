@@ -123,7 +123,7 @@ public class PlayerHealthManager : MonoBehaviour
         gameOverScreen.ShowGameOver();
         survivalTimer.PlayerDied();
         
-        // Send data to leaderboard
+        // Send data to leaderboard quand joueur est mort 
         StartCoroutine(UpdateLeaderboard());
        
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
@@ -141,7 +141,7 @@ public class PlayerHealthManager : MonoBehaviour
             survive_time = totalSeconds,  // Send total seconds as integer
             monster_killed = 0
         });
-
+        //Envoie les données au serveur avec une autorisation
         while (true)
         {
             UnityWebRequest request = new UnityWebRequest(url, "POST");

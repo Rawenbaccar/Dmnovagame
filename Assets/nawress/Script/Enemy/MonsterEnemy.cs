@@ -20,14 +20,13 @@ public class MonsterEnemy : MonoBehaviour
     public float movementSpeed = 2f; // Monster movement speed
 
     void Start()
-    {
-        player = GameObject.FindWithTag("Player"); // Assuming your player has the "Player" tag
+    { // trouver le joueur par son tag 
+        player = GameObject.FindWithTag("Player"); 
 
         // Initialize health with scaling
         if (EnemyHealthManager.Instance != null)
         {
             maxHealth = baseMaxHealth * EnemyHealthManager.Instance.GetHealthMultiplier();
-            //Debug.Log("el healthito managerito yemchito" + maxHealth.ToString());
         }
         else
         {
