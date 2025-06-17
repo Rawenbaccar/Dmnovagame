@@ -15,7 +15,7 @@ public class LaserAttack : MonoBehaviour
     {
         if (!isActive)
         {
-            isActive = true;
+            isActive = true; // to make sure that the lazer will work only nonece
             StartCoroutine(FireLaser());
         }
     }

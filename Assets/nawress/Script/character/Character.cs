@@ -8,17 +8,19 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // appele scene on lui âsser chracter choisie 
         LoadSelectedCharacter(datacontainer.selectedCharacter);
     }
     private void LoadSelectedCharacter(CharacterData selectedCharacter)
     {
+        // appele animation  passant prfab du sprite 
         InitAnimation(selectedCharacter.spritePrefab);
     }
 
 
 
 
-
+// instancier e prefab et relier composant neccesaire 
     private void InitAnimation(GameObject spritePrefab)
     {
         GameObject animObject = Instantiate(spritePrefab, transform);
